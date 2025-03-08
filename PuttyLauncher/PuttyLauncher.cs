@@ -1,0 +1,117 @@
+
+using System.Text.Json;
+using System.Diagnostics;
+using Microsoft.Win32;
+using System.Reflection;
+using System.Runtime.InteropServices;
+
+namespace PuttyLauncher
+{
+    internal static class PuttyLauncher
+    {
+        public static string ExecutableFile = Assembly.GetExecutingAssembly().Location.Replace(".dll", ".exe");
+        public static string SettingsFile = Path.Combine(Path.GetDirectoryName(ExecutableFile) ?? "", "appsettings.json");
+
+        public static AppSettings? Settings { get; private set; }
+
+        private const string autoRunRegistryKey = @"Software\Microsoft\Windows\CurrentVersion\Run";
+
+        /// <summary>
+        ///  The main entry point for the application.
+        /// </summary>
+        [STAThread]
+        static void Main()
+        {
+            Settings = AppSettings.LoadFromFile(SettingsFile);
+
+            // Do we have settings?
+            if (Settings == null)
+            {
+                MessageBox.Show("Failed to load settings from appsettings.json", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Application.Exit();
+                return;
+            }
+
+            // Check we have a PuTTY executable
+            if (!File.Exists(Settings.PuTTYPath))
+            {
+                MessageBox.Show("PuTTY not found. Check appsettings.json", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Application.Exit();
+                return;
+            }
+
+            // Check the run at startup status is correct
+            if (Settings.RunAtLogin && !IsProgramInStartup())
+                AddProgramToStartup();
+            else if (!Settings.RunAtLogin && IsProgramInStartup())
+                RemoveProgramFromStartup();
+
+            // Run the main form (it will start hidden, but put an icon in the system tray)
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new MainForm());
+        }
+
+        /// <summary>
+        /// Launch PuTTY with the given profile
+        /// </summary>
+        /// <param name="profile">Profile to launch</param>
+        public static void LaunchPutty(ConnectionProfile profile)
+        {
+            // Can't happen, but suppresses "might be null" warnings
+            if (Settings == null)
+                return;
+
+            var psi = new ProcessStartInfo
+            {
+                FileName = Settings.PuTTYPath,
+                Arguments = $"-load \"{profile.Session}\" -l {profile.User} -pw {profile.Password}",
+                UseShellExecute = false
+            };
+            Process.Start(psi);
+        }
+
+        /// <summary>
+        /// Check whether the program is set to run at startup
+        /// </summary>
+        /// <returns></returns>
+        static bool IsProgramInStartup()
+        {
+            using (RegistryKey? key = Registry.CurrentUser.OpenSubKey(autoRunRegistryKey, false))
+            {
+                return key?.GetValue(Application.ProductName) != null;
+            }
+        }
+
+        /// <summary>
+        /// Add the program to run at startup
+        /// </summary>
+        static void AddProgramToStartup()
+        {
+            using (RegistryKey? key = Registry.CurrentUser.OpenSubKey(autoRunRegistryKey, true))
+            {
+                if (key != null)
+                {
+                    key.SetValue(Application.ProductName, $"\"{Assembly.GetExecutingAssembly().Location.Replace(".dll", ".exe")}\"");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Remove the program from running at startup
+        /// </summary>
+        static void RemoveProgramFromStartup()
+        {
+            if (Application.ProductName != null)
+            {
+                using (RegistryKey? key = Registry.CurrentUser.OpenSubKey(autoRunRegistryKey, true))
+                {
+                    if (key?.GetValue(Application.ProductName) != null)
+                    {
+                        key.DeleteValue(Application.ProductName);
+                    }
+                }
+            }
+        }
+    }
+}
