@@ -1,16 +1,15 @@
 
-using System.Text.Json;
 using System.Diagnostics;
 using Microsoft.Win32;
 using System.Reflection;
-using System.Runtime.InteropServices;
 
 namespace PuttyLauncher
 {
     internal static class PuttyLauncher
     {
         public static string ExecutableFile = Assembly.GetExecutingAssembly().Location.Replace(".dll", ".exe");
-        public static string SettingsFile = Path.Combine(Path.GetDirectoryName(ExecutableFile) ?? "", "appsettings.json");
+        public static string DefaultSettingsFile = Path.Combine(Path.GetDirectoryName(ExecutableFile) ?? "", "appsettings.json");
+        public static string UserSettingsFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "PuTTYLauncher.json");
 
         public static AppSettings? Settings { get; private set; }
 
@@ -22,7 +21,10 @@ namespace PuttyLauncher
         [STAThread]
         static void Main()
         {
-            Settings = AppSettings.LoadFromFile(SettingsFile);
+            if (File.Exists(UserSettingsFile))
+                Settings = AppSettings.LoadFromFile(UserSettingsFile);
+            else
+                Settings = AppSettings.LoadFromFile(DefaultSettingsFile);
 
             // Do we have settings?
             if (Settings == null)

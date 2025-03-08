@@ -33,7 +33,6 @@
             checkRunAtLogin = new CheckBox();
             listBoxProfiles = new ListBox();
             groupBoxMain = new GroupBox();
-            buttonOpenProfile = new Button();
             textBoxPassword = new TextBox();
             textBoxUsername = new TextBox();
             comboBoxPuttySession = new ComboBox();
@@ -79,7 +78,6 @@
             // 
             // groupBoxMain
             // 
-            groupBoxMain.Controls.Add(buttonOpenProfile);
             groupBoxMain.Controls.Add(textBoxPassword);
             groupBoxMain.Controls.Add(textBoxUsername);
             groupBoxMain.Controls.Add(comboBoxPuttySession);
@@ -95,16 +93,6 @@
             groupBoxMain.TabIndex = 2;
             groupBoxMain.TabStop = false;
             groupBoxMain.Text = "Connection Profiles";
-            // 
-            // buttonOpenProfile
-            // 
-            buttonOpenProfile.Location = new Point(402, 391);
-            buttonOpenProfile.Name = "buttonOpenProfile";
-            buttonOpenProfile.Size = new Size(116, 29);
-            buttonOpenProfile.TabIndex = 10;
-            buttonOpenProfile.Text = "&Open Profile";
-            buttonOpenProfile.UseVisualStyleBackColor = true;
-            buttonOpenProfile.Click += buttonOpenProfile_Click;
             // 
             // textBoxPassword
             // 
