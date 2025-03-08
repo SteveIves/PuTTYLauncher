@@ -136,15 +136,33 @@ namespace PuTTYLauncher
         /// <param name="e"></param>
         private void listBoxProfiles_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (PuTTYLauncher.Settings == null)
+            if (PuTTYLauncher.Settings == null || listBoxProfiles.SelectedItem == null)
                 return;
 
-            //Find the selected connection profile
-            var selectedProfile = PuTTYLauncher.Settings.Profiles.FirstOrDefault(p => p.Name.Equals(listBoxProfiles.SelectedItem));
-            textBoxProfileName.Text = selectedProfile?.Name;
-            textBoxUsername.Text = selectedProfile?.User;
-            textBoxPassword.Text = selectedProfile?.Password;
-            comboBoxPuttySession.SelectedItem = selectedProfile?.Session;
+            if (listBoxProfiles.SelectedItem.Equals("Default Settings"))
+            {
+                textBoxProfileName.Text = "Default Settings";
+                comboBoxPuttySession.SelectedItem = "Default Settings";
+                textBoxUsername.Text = String.Empty;
+                textBoxPassword.Text = String.Empty;
+            }
+            else
+            {
+                //Find the selected connection profile
+                var selectedProfile = PuTTYLauncher.Settings.Profiles.FirstOrDefault(p => p.Name.Equals(listBoxProfiles.SelectedItem));
+                textBoxProfileName.Text = selectedProfile?.Name;
+                comboBoxPuttySession.SelectedItem = selectedProfile?.Session;
+                textBoxUsername.Text = selectedProfile?.User;
+                textBoxPassword.Text = selectedProfile?.Password;
+            }
+
+            textBoxProfileName.Enabled = !textBoxProfileName.Text.Equals("Default Settings");
+            comboBoxPuttySession.Enabled = comboBoxPuttySession.SelectedItem != null && !comboBoxPuttySession.SelectedItem.Equals("Default Settings");
+            textBoxUsername.Enabled = textBoxUsername.Text != String.Empty;
+            textBoxPassword.Enabled = textBoxPassword.Text != String.Empty;
+
+            btnSaveProfile.Enabled = listBoxProfiles.SelectedIndex != -1 && !listBoxProfiles.SelectedItem.Equals("Default Settings");
+            btnDeleteProfile.Enabled = listBoxProfiles.SelectedIndex != -1 && !listBoxProfiles.SelectedItem.Equals("Default Settings");
         }
 
         /// <summary>
@@ -270,6 +288,16 @@ namespace PuTTYLauncher
                 if (selectedProfile != null)
                     PuTTYLauncher.LaunchPutty(selectedProfile);
             }
+        }
+
+        private void btnSaveProfile_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Save profile not implemented", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void btnDeleteProfile_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Delete profile not implemented", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }
