@@ -1,7 +1,7 @@
 
 using Microsoft.Win32;
 
-namespace PuttyLauncher
+namespace PuTTYLauncher
 {
     public partial class MainForm : Form
     {
@@ -27,7 +27,7 @@ namespace PuttyLauncher
             _contextMenu = new ContextMenuStrip();
 
             // Can't happen, but suppresses "might be null" warnings
-            if (PuttyLauncher.Settings == null || PuttyLauncher.Settings.Profiles == null)
+            if (PuTTYLauncher.Settings == null || PuTTYLauncher.Settings.Profiles == null)
             {
                 MessageBox.Show("Settings not loaded or no profiles defined", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Application.Exit();
@@ -35,7 +35,7 @@ namespace PuttyLauncher
             }
 
             // Add profiles to the context menu
-            foreach (var profile in PuttyLauncher.Settings.Profiles)
+            foreach (var profile in PuTTYLauncher.Settings.Profiles)
             {
                 Icon? appIcon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
                 if (appIcon != null)
@@ -44,7 +44,7 @@ namespace PuttyLauncher
 
                     _contextMenu.Items.Add(profile.Name, appImage, (s, e) =>
                     {
-                        PuttyLauncher.LaunchPutty(profile);
+                        PuTTYLauncher.LaunchPutty(profile);
                     });
                 }
             }
@@ -67,7 +67,7 @@ namespace PuttyLauncher
 
             // Load UI controls
 
-            checkRunAtLogin.Checked = PuttyLauncher.Settings.RunAtLogin;
+            checkRunAtLogin.Checked = PuTTYLauncher.Settings.RunAtLogin;
 
             // Load PuTTY sessions into the session picker combo box
             comboBoxPuttySession.Items.Add("(none)");
@@ -78,9 +78,9 @@ namespace PuttyLauncher
             comboBoxPuttySession.SelectedIndex = 0;
 
             // Load profiles into the list box
-            if (PuttyLauncher.Settings.Profiles.Count > 0)
+            if (PuTTYLauncher.Settings.Profiles.Count > 0)
             {
-                foreach (var profile in PuttyLauncher.Settings.Profiles)
+                foreach (var profile in PuTTYLauncher.Settings.Profiles)
                 {
                     listBoxProfiles.Items.Add(profile.Name);
                 }
@@ -123,9 +123,9 @@ namespace PuttyLauncher
         /// <param name="e"></param>
         private void checkBoxAutoStart_CheckedChanged(object sender, EventArgs e)
         {
-            if (PuttyLauncher.Settings != null)
+            if (PuTTYLauncher.Settings != null)
             {
-                PuttyLauncher.Settings.RunAtLogin = checkRunAtLogin.Checked;
+                PuTTYLauncher.Settings.RunAtLogin = checkRunAtLogin.Checked;
             }
         }
 
@@ -136,11 +136,11 @@ namespace PuttyLauncher
         /// <param name="e"></param>
         private void listBoxProfiles_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (PuttyLauncher.Settings == null)
+            if (PuTTYLauncher.Settings == null)
                 return;
 
             //Find the selected connection profile
-            var selectedProfile = PuttyLauncher.Settings.Profiles.FirstOrDefault(p => p.Name.Equals(listBoxProfiles.SelectedItem));
+            var selectedProfile = PuTTYLauncher.Settings.Profiles.FirstOrDefault(p => p.Name.Equals(listBoxProfiles.SelectedItem));
             textBoxProfileName.Text = selectedProfile?.Name;
             textBoxUsername.Text = selectedProfile?.User;
             textBoxPassword.Text = selectedProfile?.Password;
@@ -195,12 +195,12 @@ namespace PuttyLauncher
 
         private void comboBoxPuttySession_Leave(object sender, EventArgs e)
         {
-            if (PuttyLauncher.Settings == null)
+            if (PuTTYLauncher.Settings == null)
                 return;
 
             if (!comboBoxPuttySession.Text.Equals(savedPuttySession))
             {
-                var selectedProfile = PuttyLauncher.Settings.Profiles.FirstOrDefault(p => p.Name.Equals(listBoxProfiles.SelectedItem));
+                var selectedProfile = PuTTYLauncher.Settings.Profiles.FirstOrDefault(p => p.Name.Equals(listBoxProfiles.SelectedItem));
                 if (selectedProfile != null)
                     selectedProfile.Session = comboBoxPuttySession.Text;
             }
@@ -218,12 +218,12 @@ namespace PuttyLauncher
 
         private void textBoxUsername_Leave(object sender, EventArgs e)
         {
-            if (PuttyLauncher.Settings == null)
+            if (PuTTYLauncher.Settings == null)
                 return;
 
             if (!textBoxUsername.Text.Equals(savedUsername))
             {
-                var selectedProfile = PuttyLauncher.Settings.Profiles.FirstOrDefault(p => p.Name.Equals(listBoxProfiles.SelectedItem));
+                var selectedProfile = PuTTYLauncher.Settings.Profiles.FirstOrDefault(p => p.Name.Equals(listBoxProfiles.SelectedItem));
                 if (selectedProfile != null)
                     selectedProfile.User = textBoxUsername.Text;
             }
@@ -243,10 +243,10 @@ namespace PuttyLauncher
         {
             if (!textBoxPassword.Text.Equals(savedPassword))
             {
-                if (PuttyLauncher.Settings == null || listBoxProfiles.SelectedItem == null)
+                if (PuTTYLauncher.Settings == null || listBoxProfiles.SelectedItem == null)
                     return;
 
-                var selectedProfile = PuttyLauncher.Settings.Profiles.FirstOrDefault(p => p.Name.Equals((string)(listBoxProfiles.SelectedItem)));
+                var selectedProfile = PuTTYLauncher.Settings.Profiles.FirstOrDefault(p => p.Name.Equals((string)(listBoxProfiles.SelectedItem)));
 
                 if (selectedProfile != null)
                     selectedProfile.Password = textBoxPassword.Text;
@@ -262,13 +262,13 @@ namespace PuttyLauncher
         {
             if (listBoxProfiles.SelectedIndex != -1)
             {
-                if (PuttyLauncher.Settings == null || listBoxProfiles.SelectedItem == null)
+                if (PuTTYLauncher.Settings == null || listBoxProfiles.SelectedItem == null)
                     return;
 
-                var selectedProfile = PuttyLauncher.Settings.Profiles.FirstOrDefault(p => p.Name.Equals((string)(listBoxProfiles.SelectedItem)));
+                var selectedProfile = PuTTYLauncher.Settings.Profiles.FirstOrDefault(p => p.Name.Equals((string)(listBoxProfiles.SelectedItem)));
 
                 if (selectedProfile != null)
-                    PuttyLauncher.LaunchPutty(selectedProfile);
+                    PuTTYLauncher.LaunchPutty(selectedProfile);
             }
         }
     }

@@ -3,9 +3,9 @@ using System.Diagnostics;
 using Microsoft.Win32;
 using System.Reflection;
 
-namespace PuttyLauncher
+namespace PuTTYLauncher
 {
-    internal static class PuttyLauncher
+    internal static class PuTTYLauncher
     {
         public static string ExecutableFile = Assembly.GetExecutingAssembly().Location.Replace(".dll", ".exe");
         public static string DefaultSettingsFile = Path.Combine(Path.GetDirectoryName(ExecutableFile) ?? "", "appsettings.json");

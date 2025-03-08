@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace PuttyLauncher
+namespace PuTTYLauncher
 {
     class AppSettings
     {
@@ -49,7 +49,7 @@ namespace PuttyLauncher
             try
             {
                 string json = JsonSerializer.Serialize(this, options);
-                await File.WriteAllTextAsync(PuttyLauncher.DefaultSettingsFile, json);
+                await File.WriteAllTextAsync(PuTTYLauncher.DefaultSettingsFile, json);
             }
             catch (Exception ex)
             {

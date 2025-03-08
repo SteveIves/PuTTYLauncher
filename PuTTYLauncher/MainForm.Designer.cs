@@ -1,4 +1,4 @@
-﻿namespace PuttyLauncher
+﻿namespace PuTTYLauncher
 {
     partial class MainForm
     {
@@ -206,6 +206,5 @@
         private TextBox textBoxUsername;
         private ComboBox comboBoxPuttySession;
         private TextBox textBoxProfileName;
-        private Button buttonOpenProfile;
     }
 }

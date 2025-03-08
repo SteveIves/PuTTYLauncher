@@ -1,7 +1,7 @@
 ﻿
 using System.ComponentModel;
 
-namespace PuttyLauncher
+namespace PuTTYLauncher
 {
     class ConnectionProfile : INotifyPropertyChanged
     {
