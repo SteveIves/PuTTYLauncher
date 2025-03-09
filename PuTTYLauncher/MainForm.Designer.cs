@@ -33,8 +33,8 @@
             checkRunAtLogin = new CheckBox();
             listBoxProfiles = new ListBox();
             groupBoxMain = new GroupBox();
-            btnOpen = new Button();
-            btnNewProfile = new Button();
+            btnOpenSave = new Button();
+            btnNewCancel = new Button();
             btnDeleteProfile = new Button();
             textBoxPassword = new TextBox();
             textBoxUsername = new TextBox();
@@ -81,8 +81,8 @@
             // 
             // groupBoxMain
             // 
-            groupBoxMain.Controls.Add(btnOpen);
-            groupBoxMain.Controls.Add(btnNewProfile);
+            groupBoxMain.Controls.Add(btnOpenSave);
+            groupBoxMain.Controls.Add(btnNewCancel);
             groupBoxMain.Controls.Add(btnDeleteProfile);
             groupBoxMain.Controls.Add(textBoxPassword);
             groupBoxMain.Controls.Add(textBoxUsername);
@@ -100,25 +100,25 @@
             groupBoxMain.TabStop = false;
             groupBoxMain.Text = "Connection Profiles";
             // 
-            // btnOpen
+            // btnOpenSave
             // 
-            btnOpen.Location = new Point(523, 176);
-            btnOpen.Name = "btnOpen";
-            btnOpen.Size = new Size(94, 29);
-            btnOpen.TabIndex = 13;
-            btnOpen.Text = "&Open";
-            btnOpen.UseVisualStyleBackColor = true;
-            btnOpen.Click += btnOpen_Click;
+            btnOpenSave.Location = new Point(523, 176);
+            btnOpenSave.Name = "btnOpenSave";
+            btnOpenSave.Size = new Size(94, 29);
+            btnOpenSave.TabIndex = 13;
+            btnOpenSave.Text = "&Open";
+            btnOpenSave.UseVisualStyleBackColor = true;
+            btnOpenSave.Click += btnOpenSave_Click;
             // 
-            // btnNewProfile
+            // btnNewCancel
             // 
-            btnNewProfile.Location = new Point(623, 176);
-            btnNewProfile.Name = "btnNewProfile";
-            btnNewProfile.Size = new Size(94, 29);
-            btnNewProfile.TabIndex = 12;
-            btnNewProfile.Text = "&New";
-            btnNewProfile.UseVisualStyleBackColor = true;
-            btnNewProfile.Click += btnNewProfile_Click;
+            btnNewCancel.Location = new Point(623, 176);
+            btnNewCancel.Name = "btnNewCancel";
+            btnNewCancel.Size = new Size(94, 29);
+            btnNewCancel.TabIndex = 12;
+            btnNewCancel.Text = "&New";
+            btnNewCancel.UseVisualStyleBackColor = true;
+            btnNewCancel.Click += btnNewCancel_Click;
             // 
             // btnDeleteProfile
             // 
@@ -240,7 +240,7 @@
         private ComboBox comboBoxPuttySession;
         private TextBox textBoxProfileName;
         private Button btnDeleteProfile;
-        private Button btnNewProfile;
-        private Button btnOpen;
+        private Button btnNewCancel;
+        private Button btnOpenSave;
     }
 }

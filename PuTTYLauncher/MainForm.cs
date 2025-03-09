@@ -10,6 +10,7 @@ namespace PuTTYLauncher
         private ConnectionProfile? _selectedProfile;
         private ConnectionProfile? _selectedProfileBackup;
         private bool loadingData = true;
+        private bool newProfileMode = false;
 
         /// <summary>
         /// The main form constructor
@@ -259,14 +260,67 @@ namespace PuTTYLauncher
 
         // Button click event handlers ----------------------------------------
 
-        private void btnOpen_Click(object sender, EventArgs e)
+        private void btnOpenSave_Click(object sender, EventArgs e)
         {
-            launchSelectedProfile();
+            if (newProfileMode)
+            {
+                //We're a Save new profile button
+
+            }
+            else
+            {
+                //We're an Open profile button
+                launchSelectedProfile();
+            }
         }
 
-        private void btnNewProfile_Click(object sender, EventArgs e)
+        private void btnNewCancel_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("New profile not implemented", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            if (!newProfileMode)
+            {
+                newProfileMode = true;
+
+                listBoxProfiles.Enabled = false;
+
+                textBoxProfileName.Text = String.Empty;
+                comboBoxPuttySession.SelectedIndex = 0;
+                textBoxUsername.Text = String.Empty;
+                textBoxPassword.Text = String.Empty;
+
+                textBoxProfileName.Enabled = true;
+                comboBoxPuttySession.Enabled = true;
+                textBoxUsername.Enabled = true;
+                textBoxPassword.Enabled = true;
+
+                btnOpenSave.Enabled = false;
+                btnDeleteProfile.Enabled = false;
+                btnOpenSave.Text = "Save";
+                btnNewCancel.Text = "Cancel";
+                textBoxProfileName.Focus();
+            }
+            else
+            {
+                //Validate
+
+                //Save
+
+
+                //Reset
+                newProfileMode = false;
+                textBoxProfileName.Text = _selectedProfile?.Name;
+                comboBoxPuttySession.SelectedItem = _selectedProfile?.Session;
+                textBoxUsername.Text = _selectedProfile?.User;
+                textBoxPassword.Text = _selectedProfile?.Password;
+                comboBoxPuttySession.SelectedIndex = 0;
+                textBoxUsername.Text = String.Empty;
+                textBoxPassword.Text = String.Empty;
+                listBoxProfiles.Enabled = true;
+                btnOpenSave.Enabled = true;
+                btnDeleteProfile.Enabled = true;
+                btnOpenSave.Text = "Open";
+                btnNewCancel.Text = "New";
+                listBoxProfiles.Focus();
+            }
         }
 
         private void btnDeleteProfile_Click(object sender, EventArgs e)
