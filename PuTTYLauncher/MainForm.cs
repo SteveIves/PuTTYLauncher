@@ -244,13 +244,14 @@ namespace PuTTYLauncher
         /// <param name="e"></param>
         private void listBoxProfiles_DoubleClick(object sender, EventArgs e)
         {
-            if (listBoxProfiles.SelectedIndex != -1)
+            launchSelectedProfile();
+        }
+
+        private void launchSelectedProfile()
+        {
+            if (listBoxProfiles.SelectedItem != null && listBoxProfiles.SelectedIndex != -1 && PuTTYLauncher.Settings != null)
             {
-                if (PuTTYLauncher.Settings == null || listBoxProfiles.SelectedItem == null)
-                    return;
-
-                var selectedProfile = PuTTYLauncher.Settings.Profiles.FirstOrDefault(p => p.Name.Equals((string)(listBoxProfiles.SelectedItem)));
-
+                var selectedProfile = PuTTYLauncher.Settings.Profiles.FirstOrDefault(p => p.Name.Equals(listBoxProfiles.SelectedItem));
                 if (selectedProfile != null)
                     PuTTYLauncher.LaunchPutty(selectedProfile);
             }
@@ -258,9 +259,19 @@ namespace PuTTYLauncher
 
         // Button click event handlers ----------------------------------------
 
+        private void btnOpen_Click(object sender, EventArgs e)
+        {
+            launchSelectedProfile();
+        }
+
+        private void btnNewProfile_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("New profile not implemented", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
         private void btnDeleteProfile_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Delete profile not implemented", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("Delete profile not implemented", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }

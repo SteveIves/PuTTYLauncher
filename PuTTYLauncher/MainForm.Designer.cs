@@ -33,6 +33,8 @@
             checkRunAtLogin = new CheckBox();
             listBoxProfiles = new ListBox();
             groupBoxMain = new GroupBox();
+            btnOpen = new Button();
+            btnNewProfile = new Button();
             btnDeleteProfile = new Button();
             textBoxPassword = new TextBox();
             textBoxUsername = new TextBox();
@@ -79,6 +81,8 @@
             // 
             // groupBoxMain
             // 
+            groupBoxMain.Controls.Add(btnOpen);
+            groupBoxMain.Controls.Add(btnNewProfile);
             groupBoxMain.Controls.Add(btnDeleteProfile);
             groupBoxMain.Controls.Add(textBoxPassword);
             groupBoxMain.Controls.Add(textBoxUsername);
@@ -95,6 +99,26 @@
             groupBoxMain.TabIndex = 2;
             groupBoxMain.TabStop = false;
             groupBoxMain.Text = "Connection Profiles";
+            // 
+            // btnOpen
+            // 
+            btnOpen.Location = new Point(523, 176);
+            btnOpen.Name = "btnOpen";
+            btnOpen.Size = new Size(94, 29);
+            btnOpen.TabIndex = 13;
+            btnOpen.Text = "&Open";
+            btnOpen.UseVisualStyleBackColor = true;
+            btnOpen.Click += btnOpen_Click;
+            // 
+            // btnNewProfile
+            // 
+            btnNewProfile.Location = new Point(623, 176);
+            btnNewProfile.Name = "btnNewProfile";
+            btnNewProfile.Size = new Size(94, 29);
+            btnNewProfile.TabIndex = 12;
+            btnNewProfile.Text = "&New";
+            btnNewProfile.UseVisualStyleBackColor = true;
+            btnNewProfile.Click += btnNewProfile_Click;
             // 
             // btnDeleteProfile
             // 
@@ -216,5 +240,7 @@
         private ComboBox comboBoxPuttySession;
         private TextBox textBoxProfileName;
         private Button btnDeleteProfile;
+        private Button btnNewProfile;
+        private Button btnOpen;
     }
 }
