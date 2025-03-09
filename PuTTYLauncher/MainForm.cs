@@ -7,6 +7,9 @@ namespace PuTTYLauncher
     {
         private NotifyIcon _notifyIcon;
         private ContextMenuStrip _contextMenu;
+        private ConnectionProfile? _selectedProfile;
+        private ConnectionProfile? _selectedProfileBackup;
+        private bool loadingData = true;
 
         /// <summary>
         /// The main form constructor
@@ -71,7 +74,7 @@ namespace PuTTYLauncher
 
             // Load PuTTY sessions into the session picker combo box
             comboBoxPuttySession.Items.Add("(none)");
-            foreach (var session in GetPuttySessions())
+            foreach (var session in PuTTYLauncher.GetPuttySessions())
             {
                 comboBoxPuttySession.Items.Add(session);
             }
@@ -87,17 +90,72 @@ namespace PuTTYLauncher
 
                 listBoxProfiles.SelectedIndex = 0;
             }
+
+            loadingData = false;
         }
 
         /// <summary>
-        /// The user clicked the Exit menu item. Close the application.
+        /// The user picked a different profile from the list
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void OnExit(object? sender, EventArgs? e)
+        private void listBoxProfiles_SelectedIndexChanged(object sender, EventArgs e)
         {
-            _notifyIcon.Visible = false;
-            Application.Exit();
+            if (PuTTYLauncher.Settings == null || listBoxProfiles.SelectedItem == null)
+                return;
+
+            // Find the selected connection profile
+            _selectedProfile = PuTTYLauncher.Settings.Profiles.FirstOrDefault(p => p.Name.Equals(listBoxProfiles.SelectedItem));
+
+            // Can't happen, but suppresses "might be null" warnings
+            if (_selectedProfile == null)
+                return;
+
+            // And create a backup copy of the profile so we can detect changes
+            _selectedProfileBackup = _selectedProfile.Copy();
+
+            // Suppress save button processing while we load the profile data
+            loadingData = true;
+
+            if (_selectedProfile.Name.Equals("Default Settings"))
+            {
+                textBoxProfileName.Text = _selectedProfile.Name;
+                comboBoxPuttySession.SelectedItem = _selectedProfile.Name;
+                textBoxUsername.Text = String.Empty;
+                textBoxPassword.Text = String.Empty;
+                textBoxProfileName.Enabled = false;
+                comboBoxPuttySession.Enabled = false;
+                textBoxUsername.Enabled = false;
+                textBoxPassword.Enabled = false;
+                btnDeleteProfile.Enabled = false;
+            }
+            else
+            {
+                textBoxProfileName.Text = _selectedProfile.Name;
+                comboBoxPuttySession.SelectedItem = _selectedProfile.Session;
+                textBoxUsername.Text = _selectedProfile.User;
+                textBoxPassword.Text = _selectedProfile.Password;
+                textBoxProfileName.Enabled = true;
+                comboBoxPuttySession.Enabled = true;
+                textBoxUsername.Enabled = true;
+                textBoxPassword.Enabled = true;
+                btnDeleteProfile.Enabled = true;
+            }
+
+            loadingData = false;
+        }
+
+        /// <summary>
+        /// The user changed the auto-start setting
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void checkBoxAutoStart_CheckedChanged(object sender, EventArgs e)
+        {
+            if (PuTTYLauncher.Settings != null)
+            {
+                PuTTYLauncher.Settings.RunAtLogin = checkRunAtLogin.Checked;
+            }
         }
 
         /// <summary>
@@ -117,159 +175,67 @@ namespace PuTTYLauncher
         }
 
         /// <summary>
-        /// The user changed the auto-start setting
+        /// The user clicked the Exit menu item. Close the application.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void checkBoxAutoStart_CheckedChanged(object sender, EventArgs e)
+        private void OnExit(object? sender, EventArgs? e)
         {
-            if (PuTTYLauncher.Settings != null)
+            _notifyIcon.Visible = false;
+            Application.Exit();
+        }
+
+        // Field editing event handlers and logic -----------------------------
+
+        private void textBoxProfileName_TextChanged(object sender, EventArgs e)
+        {
+            if (_selectedProfile != null && !loadingData)
             {
-                PuTTYLauncher.Settings.RunAtLogin = checkRunAtLogin.Checked;
+                _selectedProfile.Name = textBoxProfileName.Text;
+                maybeSaveStatus();
             }
         }
 
-        /// <summary>
-        /// The user has picked a different profile from the list
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void listBoxProfiles_SelectedIndexChanged(object sender, EventArgs e)
+        private void comboBoxPuttySession_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (PuTTYLauncher.Settings == null || listBoxProfiles.SelectedItem == null)
-                return;
-
-            if (listBoxProfiles.SelectedItem.Equals("Default Settings"))
+            if (_selectedProfile != null && !loadingData)
             {
-                textBoxProfileName.Text = "Default Settings";
-                comboBoxPuttySession.SelectedItem = "Default Settings";
-                textBoxUsername.Text = String.Empty;
-                textBoxPassword.Text = String.Empty;
+                _selectedProfile.Session = comboBoxPuttySession.SelectedText;
+                maybeSaveStatus();
             }
-            else
-            {
-                //Find the selected connection profile
-                var selectedProfile = PuTTYLauncher.Settings.Profiles.FirstOrDefault(p => p.Name.Equals(listBoxProfiles.SelectedItem));
-                textBoxProfileName.Text = selectedProfile?.Name;
-                comboBoxPuttySession.SelectedItem = selectedProfile?.Session;
-                textBoxUsername.Text = selectedProfile?.User;
-                textBoxPassword.Text = selectedProfile?.Password;
-            }
-
-            textBoxProfileName.Enabled = !textBoxProfileName.Text.Equals("Default Settings");
-            comboBoxPuttySession.Enabled = comboBoxPuttySession.SelectedItem != null && !comboBoxPuttySession.SelectedItem.Equals("Default Settings");
-            textBoxUsername.Enabled = textBoxUsername.Text != String.Empty;
-            textBoxPassword.Enabled = textBoxPassword.Text != String.Empty;
-
-            btnSaveProfile.Enabled = listBoxProfiles.SelectedIndex != -1 && !listBoxProfiles.SelectedItem.Equals("Default Settings");
-            btnDeleteProfile.Enabled = listBoxProfiles.SelectedIndex != -1 && !listBoxProfiles.SelectedItem.Equals("Default Settings");
         }
 
-        /// <summary>
-        /// Get a list of PuTTY sessions from the registry
-        /// </summary>
-        /// <returns></returns>
-        static IEnumerable<string> GetPuttySessions()
+        private void textBoxUsername_TextChanged(object sender, EventArgs e)
         {
-            const string puttyRegKey = @"Software\SimonTatham\PuTTY\Sessions";
-            using RegistryKey? key = Registry.CurrentUser.OpenSubKey(puttyRegKey);
-
-            if (key != null)
+            if (_selectedProfile != null && !loadingData)
             {
-                foreach (var sessionName in key.GetSubKeyNames())
+                _selectedProfile.User = textBoxUsername.Text;
+                maybeSaveStatus();
+            }
+        }
+
+        private void textBoxPassword_TextChanged(object sender, EventArgs e)
+        {
+            if (_selectedProfile != null && !loadingData)
+            {
+                _selectedProfile.Password = textBoxPassword.Text;
+                maybeSaveStatus();
+            }
+        }
+
+        private void maybeSaveStatus()
+        {
+            if (!loadingData && listBoxProfiles.SelectedItem != null && _selectedProfile != null && _selectedProfileBackup != null && PuTTYLauncher.Settings != null)
+            {
+                if (!_selectedProfile.IsSameAs(_selectedProfileBackup))
                 {
-                    yield return sessionName.Replace("%20", " ");
+                    //Save
+                    PuTTYLauncher.Settings.SaveToFile();
                 }
             }
         }
 
-        /// <summary>
-        /// Handle profile name changes
-        /// </summary>
-
-        private string savedProfileName = String.Empty;
-        private void textBoxProfileName_Enter(object sender, EventArgs e)
-        {
-            savedProfileName = textBoxProfileName.Text;
-        }
-
-        private void textBoxProfileName_Leave(object sender, EventArgs e)
-        {
-            if (!textBoxProfileName.Text.Equals(savedProfileName))
-            {
-                //:TODO: Update the profile name
-            }
-        }
-
-        /// <summary>
-        /// Handle putty session name changes
-        /// </summary>
-
-        private string savedPuttySession = String.Empty;
-        private void comboBoxPuttySession_Enter(object sender, EventArgs e)
-        {
-            savedPuttySession = comboBoxPuttySession.Text;
-        }
-
-        private void comboBoxPuttySession_Leave(object sender, EventArgs e)
-        {
-            if (PuTTYLauncher.Settings == null)
-                return;
-
-            if (!comboBoxPuttySession.Text.Equals(savedPuttySession))
-            {
-                var selectedProfile = PuTTYLauncher.Settings.Profiles.FirstOrDefault(p => p.Name.Equals(listBoxProfiles.SelectedItem));
-                if (selectedProfile != null)
-                    selectedProfile.Session = comboBoxPuttySession.Text;
-            }
-        }
-
-        /// <summary>
-        /// Handle username changes
-        /// </summary>
-
-        private string savedUsername = String.Empty;
-        private void textBoxUsername_Enter(object sender, EventArgs e)
-        {
-            savedUsername = textBoxUsername.Text;
-        }
-
-        private void textBoxUsername_Leave(object sender, EventArgs e)
-        {
-            if (PuTTYLauncher.Settings == null)
-                return;
-
-            if (!textBoxUsername.Text.Equals(savedUsername))
-            {
-                var selectedProfile = PuTTYLauncher.Settings.Profiles.FirstOrDefault(p => p.Name.Equals(listBoxProfiles.SelectedItem));
-                if (selectedProfile != null)
-                    selectedProfile.User = textBoxUsername.Text;
-            }
-        }
-
-        /// <summary>
-        /// Handle passowrd changes
-        /// </summary>
-
-        private string savedPassword = String.Empty;
-        private void textBoxPassword_Enter(object sender, EventArgs e)
-        {
-            savedPassword = textBoxPassword.Text;
-        }
-
-        private void textBoxPassword_Leave(object sender, EventArgs e)
-        {
-            if (!textBoxPassword.Text.Equals(savedPassword))
-            {
-                if (PuTTYLauncher.Settings == null || listBoxProfiles.SelectedItem == null)
-                    return;
-
-                var selectedProfile = PuTTYLauncher.Settings.Profiles.FirstOrDefault(p => p.Name.Equals((string)(listBoxProfiles.SelectedItem)));
-
-                if (selectedProfile != null)
-                    selectedProfile.Password = textBoxPassword.Text;
-            }
-        }
+        // List double-ckick event handler ------------------------------------
 
         /// <summary>
         /// The user double-clicked a profile in the list. Launch PuTTY with the selected profile.
@@ -290,10 +256,7 @@ namespace PuTTYLauncher
             }
         }
 
-        private void btnSaveProfile_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("Save profile not implemented", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
+        // Button click event handlers ----------------------------------------
 
         private void btnDeleteProfile_Click(object sender, EventArgs e)
         {

@@ -7,6 +7,8 @@ namespace PuTTYLauncher
 {
     class AppSettings
     {
+        public static string DefaultSettingsFile = Path.Combine(Path.GetDirectoryName(PuTTYLauncher.ExecutableFile) ?? "", "appsettings.json");
+        public static string UserSettingsFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "PuTTYLauncher.json");
         public string SettingsFile { get; private set; } = String.Empty;
         private static bool initialLoadSettings = true;
 
@@ -30,15 +32,20 @@ namespace PuTTYLauncher
                 }
                 catch (Exception)
                 {
+                    MessageBox.Show($"Failed to load settings from {SettingsFile}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
 
             return settings ?? null;
         }
-        private async void saveToFile()
+
+        public void SaveToFile()
         {
             if (initialLoadSettings == true)
                 return;
+
+            if (SettingsFile.Equals(DefaultSettingsFile))
+                SettingsFile = UserSettingsFile;
 
             var options = new JsonSerializerOptions
             {
@@ -49,7 +56,7 @@ namespace PuTTYLauncher
             try
             {
                 string json = JsonSerializer.Serialize(this, options);
-                await File.WriteAllTextAsync(PuTTYLauncher.DefaultSettingsFile, json);
+                File.WriteAllText(SettingsFile, json);
             }
             catch (Exception ex)
             {
@@ -70,7 +77,7 @@ namespace PuTTYLauncher
                     runAtLogin = value;
                     if (!initialLoadSettings)
                     {
-                        saveToFile();
+                        SaveToFile();
                     }
                 }
             }
@@ -90,7 +97,7 @@ namespace PuTTYLauncher
                     puTTYPath = value;
                     if (!initialLoadSettings)
                     {
-                        saveToFile();
+                        SaveToFile();
                     }
                 }
             }
@@ -121,13 +128,13 @@ namespace PuTTYLauncher
                         profile.PropertyChanged += Profile_PropertyChanged;
                     }
 
-                    saveToFile();
+                    SaveToFile();
                 }
             }
         }
         private void Profile_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            saveToFile();
+            SaveToFile();
         }
     }
 }

@@ -8,8 +8,6 @@ namespace PuTTYLauncher
     internal static class PuTTYLauncher
     {
         public static string ExecutableFile = Assembly.GetExecutingAssembly().Location.Replace(".dll", ".exe");
-        public static string DefaultSettingsFile = Path.Combine(Path.GetDirectoryName(ExecutableFile) ?? "", "appsettings.json");
-        public static string UserSettingsFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "PuTTYLauncher.json");
 
         public static AppSettings? Settings { get; private set; }
 
@@ -21,10 +19,10 @@ namespace PuTTYLauncher
         [STAThread]
         static void Main()
         {
-            if (File.Exists(UserSettingsFile))
-                Settings = AppSettings.LoadFromFile(UserSettingsFile);
+            if (File.Exists(AppSettings.UserSettingsFile))
+                Settings = AppSettings.LoadFromFile(AppSettings.UserSettingsFile);
             else
-                Settings = AppSettings.LoadFromFile(DefaultSettingsFile);
+                Settings = AppSettings.LoadFromFile(AppSettings.DefaultSettingsFile);
 
             // Do we have settings?
             if (Settings == null)
@@ -112,6 +110,24 @@ namespace PuTTYLauncher
                     {
                         key.DeleteValue(Application.ProductName);
                     }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Get a list of PuTTY sessions from the registry
+        /// </summary>
+        /// <returns></returns>
+        public static IEnumerable<string> GetPuttySessions()
+        {
+            const string puttyRegKey = @"Software\SimonTatham\PuTTY\Sessions";
+            using RegistryKey? key = Registry.CurrentUser.OpenSubKey(puttyRegKey);
+
+            if (key != null)
+            {
+                foreach (var sessionName in key.GetSubKeyNames())
+                {
+                    yield return sessionName.Replace("%20", " ");
                 }
             }
         }

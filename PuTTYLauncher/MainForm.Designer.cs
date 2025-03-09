@@ -34,7 +34,6 @@
             listBoxProfiles = new ListBox();
             groupBoxMain = new GroupBox();
             btnDeleteProfile = new Button();
-            btnSaveProfile = new Button();
             textBoxPassword = new TextBox();
             textBoxUsername = new TextBox();
             comboBoxPuttySession = new ComboBox();
@@ -81,7 +80,6 @@
             // groupBoxMain
             // 
             groupBoxMain.Controls.Add(btnDeleteProfile);
-            groupBoxMain.Controls.Add(btnSaveProfile);
             groupBoxMain.Controls.Add(textBoxPassword);
             groupBoxMain.Controls.Add(textBoxUsername);
             groupBoxMain.Controls.Add(comboBoxPuttySession);
@@ -101,24 +99,13 @@
             // btnDeleteProfile
             // 
             btnDeleteProfile.Enabled = false;
-            btnDeleteProfile.Location = new Point(732, 178);
+            btnDeleteProfile.Location = new Point(832, 176);
             btnDeleteProfile.Name = "btnDeleteProfile";
             btnDeleteProfile.Size = new Size(94, 29);
             btnDeleteProfile.TabIndex = 11;
             btnDeleteProfile.Text = "&Delete";
             btnDeleteProfile.UseVisualStyleBackColor = true;
             btnDeleteProfile.Click += btnDeleteProfile_Click;
-            // 
-            // btnSaveProfile
-            // 
-            btnSaveProfile.Enabled = false;
-            btnSaveProfile.Location = new Point(832, 178);
-            btnSaveProfile.Name = "btnSaveProfile";
-            btnSaveProfile.Size = new Size(94, 29);
-            btnSaveProfile.TabIndex = 10;
-            btnSaveProfile.Text = "&Save";
-            btnSaveProfile.UseVisualStyleBackColor = true;
-            btnSaveProfile.Click += btnSaveProfile_Click;
             // 
             // textBoxPassword
             // 
@@ -127,8 +114,7 @@
             textBoxPassword.PasswordChar = '*';
             textBoxPassword.Size = new Size(403, 27);
             textBoxPassword.TabIndex = 9;
-            textBoxPassword.Enter += textBoxPassword_Enter;
-            textBoxPassword.Leave += textBoxPassword_Leave;
+            textBoxPassword.TextChanged += textBoxPassword_TextChanged;
             // 
             // textBoxUsername
             // 
@@ -136,8 +122,7 @@
             textBoxUsername.Name = "textBoxUsername";
             textBoxUsername.Size = new Size(403, 27);
             textBoxUsername.TabIndex = 8;
-            textBoxUsername.Enter += textBoxUsername_Enter;
-            textBoxUsername.Leave += textBoxUsername_Leave;
+            textBoxUsername.TextChanged += textBoxUsername_TextChanged;
             // 
             // comboBoxPuttySession
             // 
@@ -147,8 +132,7 @@
             comboBoxPuttySession.Name = "comboBoxPuttySession";
             comboBoxPuttySession.Size = new Size(403, 28);
             comboBoxPuttySession.TabIndex = 7;
-            comboBoxPuttySession.Enter += comboBoxPuttySession_Enter;
-            comboBoxPuttySession.Leave += comboBoxPuttySession_Leave;
+            comboBoxPuttySession.SelectedIndexChanged += comboBoxPuttySession_SelectedIndexChanged;
             // 
             // textBoxProfileName
             // 
@@ -156,8 +140,7 @@
             textBoxProfileName.Name = "textBoxProfileName";
             textBoxProfileName.Size = new Size(403, 27);
             textBoxProfileName.TabIndex = 6;
-            textBoxProfileName.Enter += textBoxProfileName_Enter;
-            textBoxProfileName.Leave += textBoxProfileName_Leave;
+            textBoxProfileName.TextChanged += textBoxProfileName_TextChanged;
             // 
             // lblPassword
             // 
@@ -233,6 +216,5 @@
         private ComboBox comboBoxPuttySession;
         private TextBox textBoxProfileName;
         private Button btnDeleteProfile;
-        private Button btnSaveProfile;
     }
 }

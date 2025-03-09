@@ -17,6 +17,25 @@ namespace PuTTYLauncher
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        public ConnectionProfile Copy()
+        {
+            return new ConnectionProfile
+            {
+                Name = Name,
+                Session = Session,
+                User = User,
+                Password = Password
+            };
+        }
+
+        public bool IsSameAs(ConnectionProfile other)
+        {
+            return Name == other.Name &&
+                   Session == other.Session &&
+                   User == other.User &&
+                   Password == other.Password;
+        }
+
         public string Name
         {
             get => name;
