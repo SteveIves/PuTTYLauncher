@@ -1,5 +1,6 @@
 ﻿
 using System.ComponentModel;
+using System.Text.Json.Serialization;
 
 namespace PuTTYLauncher
 {
@@ -9,6 +10,11 @@ namespace PuTTYLauncher
         private string session = String.Empty;
         private string user = String.Empty;
         private string password = String.Empty;
+
+        public ConnectionProfile()
+        {
+            Key = Guid.NewGuid().ToString();
+        }
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -21,6 +27,7 @@ namespace PuTTYLauncher
         {
             return new ConnectionProfile
             {
+                Key = Key,
                 Name = Name,
                 Session = Session,
                 User = User,
@@ -30,10 +37,18 @@ namespace PuTTYLauncher
 
         public bool IsSameAs(ConnectionProfile other)
         {
-            return Name == other.Name &&
+            return Key == other.Key &&
+                   Name == other.Name &&
                    Session == other.Session &&
                    User == other.User &&
                    Password == other.Password;
+        }
+
+        [JsonIgnore]
+        public string Key
+        {
+            get;
+            private set;
         }
 
         public string Name

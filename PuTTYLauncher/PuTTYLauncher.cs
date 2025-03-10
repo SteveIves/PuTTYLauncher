@@ -19,15 +19,21 @@ namespace PuTTYLauncher
         [STAThread]
         static void Main()
         {
-            if (File.Exists(AppSettings.UserSettingsFile))
-                Settings = AppSettings.LoadFromFile(AppSettings.UserSettingsFile);
-            else
-                Settings = AppSettings.LoadFromFile(AppSettings.DefaultSettingsFile);
+            try
+            {
+                Settings = AppSettings.LoadFromFile();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Application.Exit();
+                return;
+            }
 
             // Do we have settings?
             if (Settings == null)
             {
-                MessageBox.Show("Failed to load settings from appsettings.json", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Failed to load user settings!", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Application.Exit();
                 return;
             }
@@ -35,7 +41,7 @@ namespace PuTTYLauncher
             // Check we have a PuTTY executable
             if (!File.Exists(Settings.PuTTYPath))
             {
-                MessageBox.Show("PuTTY not found. Check appsettings.json", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("PuTTY not found. Check appsettings.json", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Application.Exit();
                 return;
             }

@@ -31,8 +31,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             groupBoxSettings = new GroupBox();
             checkRunAtLogin = new CheckBox();
-            listBoxProfiles = new ListBox();
             groupBoxMain = new GroupBox();
+            listViewProfiles = new ListView();
             btnOpenSave = new Button();
             btnNewCancel = new Button();
             btnDeleteProfile = new Button();
@@ -69,18 +69,9 @@
             checkRunAtLogin.UseVisualStyleBackColor = true;
             checkRunAtLogin.CheckedChanged += checkBoxAutoStart_CheckedChanged;
             // 
-            // listBoxProfiles
-            // 
-            listBoxProfiles.FormattingEnabled = true;
-            listBoxProfiles.Location = new Point(35, 36);
-            listBoxProfiles.Name = "listBoxProfiles";
-            listBoxProfiles.Size = new Size(340, 384);
-            listBoxProfiles.TabIndex = 1;
-            listBoxProfiles.SelectedIndexChanged += listBoxProfiles_SelectedIndexChanged;
-            listBoxProfiles.DoubleClick += listBoxProfiles_DoubleClick;
-            // 
             // groupBoxMain
             // 
+            groupBoxMain.Controls.Add(listViewProfiles);
             groupBoxMain.Controls.Add(btnOpenSave);
             groupBoxMain.Controls.Add(btnNewCancel);
             groupBoxMain.Controls.Add(btnDeleteProfile);
@@ -92,13 +83,26 @@
             groupBoxMain.Controls.Add(lblUsername);
             groupBoxMain.Controls.Add(lblPuttySession);
             groupBoxMain.Controls.Add(lblProfileName);
-            groupBoxMain.Controls.Add(listBoxProfiles);
             groupBoxMain.Location = new Point(12, 87);
             groupBoxMain.Name = "groupBoxMain";
             groupBoxMain.Size = new Size(958, 454);
             groupBoxMain.TabIndex = 2;
             groupBoxMain.TabStop = false;
             groupBoxMain.Text = "Connection Profiles";
+            // 
+            // listViewProfiles
+            // 
+            listViewProfiles.FullRowSelect = true;
+            listViewProfiles.HeaderStyle = ColumnHeaderStyle.None;
+            listViewProfiles.Location = new Point(16, 33);
+            listViewProfiles.MultiSelect = false;
+            listViewProfiles.Name = "listViewProfiles";
+            listViewProfiles.Size = new Size(363, 393);
+            listViewProfiles.TabIndex = 1;
+            listViewProfiles.UseCompatibleStateImageBehavior = false;
+            listViewProfiles.View = View.Details;
+            listViewProfiles.SelectedIndexChanged += listViewProfiles_SelectedIndexChanged;
+            listViewProfiles.DoubleClick += listViewProfiles_DoubleClick;
             // 
             // btnOpenSave
             // 
@@ -214,9 +218,11 @@
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "MainForm";
+            ShowInTaskbar = false;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "PuTTY Launcher";
             WindowState = FormWindowState.Minimized;
+            Activated += MainForm_Activated;
             FormClosing += MainForm_FormClosing;
             groupBoxSettings.ResumeLayout(false);
             groupBoxSettings.PerformLayout();
@@ -229,7 +235,6 @@
 
         private GroupBox groupBoxSettings;
         private CheckBox checkRunAtLogin;
-        private ListBox listBoxProfiles;
         private GroupBox groupBoxMain;
         private Label lblProfileName;
         private Label lblPassword;
@@ -242,5 +247,6 @@
         private Button btnDeleteProfile;
         private Button btnNewCancel;
         private Button btnOpenSave;
+        private ListView listViewProfiles;
     }
 }

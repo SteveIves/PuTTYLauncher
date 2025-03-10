@@ -7,45 +7,53 @@ namespace PuTTYLauncher
 {
     class AppSettings
     {
-        public static string DefaultSettingsFile = Path.Combine(Path.GetDirectoryName(PuTTYLauncher.ExecutableFile) ?? "", "appsettings.json");
-        public static string UserSettingsFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "PuTTYLauncher.json");
-        public string SettingsFile { get; private set; } = String.Empty;
+        private static string DefaultSettingsFile = Path.Combine(Path.GetDirectoryName(PuTTYLauncher.ExecutableFile) ?? "", "appsettings.json");
+        private static string SettingsFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "PuTTYLauncher.json");
         private static bool initialLoadSettings = true;
 
-        public static AppSettings? LoadFromFile(string SettingsFile)
+        public static AppSettings? LoadFromFile()
         {
             AppSettings? settings = null;
 
-            // Do we have a settings file?
-            if (File.Exists(SettingsFile))
+            // Do we have a user settings file?
+
+            if (!File.Exists(SettingsFile))
             {
-                // Load the settings file
                 try
                 {
-                    string jsonString = File.ReadAllText(SettingsFile);
-                    settings = JsonSerializer.Deserialize<AppSettings>(jsonString);
-                    if (settings != null)
-                    {
-                        settings.SettingsFile = SettingsFile;
-                        initialLoadSettings = false;
-                    }
+                    File.Copy(DefaultSettingsFile, SettingsFile);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    MessageBox.Show($"Failed to load settings from {SettingsFile}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    throw new ApplicationException($"Failed to create user settings file: {ex.Message}");
                 }
+            }
+
+            // Load the settings file
+
+            try
+            {
+                string jsonString = File.ReadAllText(SettingsFile);
+                settings = JsonSerializer.Deserialize<AppSettings>(jsonString);
+                if (settings != null)
+                {
+                    initialLoadSettings = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException($"Failed to load settings: {ex.Message}");
             }
 
             return settings ?? null;
         }
 
-        public void SaveToFile()
+        public bool SaveToFile()
         {
-            if (initialLoadSettings == true)
-                return;
+            bool saved = false;
 
-            if (SettingsFile.Equals(DefaultSettingsFile))
-                SettingsFile = UserSettingsFile;
+            if (initialLoadSettings == true)
+                return false;
 
             var options = new JsonSerializerOptions
             {
@@ -57,11 +65,13 @@ namespace PuTTYLauncher
             {
                 string json = JsonSerializer.Serialize(this, options);
                 File.WriteAllText(SettingsFile, json);
+                saved = true;
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Failed to save settings: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Failed to save settings: {ex.Message}", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            return saved;
         }
 
         // Run at login

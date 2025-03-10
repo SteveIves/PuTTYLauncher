@@ -1,16 +1,19 @@
 
-using Microsoft.Win32;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Collections.Generic;
 
 namespace PuTTYLauncher
 {
     public partial class MainForm : Form
     {
-        private NotifyIcon _notifyIcon;
-        private ContextMenuStrip _contextMenu;
-        private ConnectionProfile? _selectedProfile;
-        private ConnectionProfile? _selectedProfileBackup;
+        private NotifyIcon notifyIcon;
+        private ContextMenuStrip contextMenu;
+        private ConnectionProfile? selectedProfile;
+        private ConnectionProfile? selectedProfileBackup;
         private bool loadingData = true;
         private bool newProfileMode = false;
+        private Icon? appIcon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
+        Image? appImage;
 
         /// <summary>
         /// The main form constructor
@@ -18,62 +21,30 @@ namespace PuTTYLauncher
         public MainForm()
         {
             InitializeComponent();
+            contextMenu = new ContextMenuStrip();
 
             // Create a system tray icon
-            _notifyIcon = new NotifyIcon
+            notifyIcon = new NotifyIcon
             {
                 Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath),
                 Text = "PuTTY Launcher",
                 Visible = true
             };
 
-            // Create context menu
-            _contextMenu = new ContextMenuStrip();
-
             // Can't happen, but suppresses "might be null" warnings
             if (PuTTYLauncher.Settings == null || PuTTYLauncher.Settings.Profiles == null)
             {
-                MessageBox.Show("Settings not loaded or no profiles defined", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Settings not loaded or no profiles defined", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Application.Exit();
                 return;
             }
 
-            // Add profiles to the context menu
-            foreach (var profile in PuTTYLauncher.Settings.Profiles)
-            {
-                Icon? appIcon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
-                if (appIcon != null)
-                {
-                    Image appImage = appIcon.ToBitmap();
-
-                    _contextMenu.Items.Add(profile.Name, appImage, (s, e) =>
-                    {
-                        PuTTYLauncher.LaunchPutty(profile);
-                    });
-                }
-            }
-
-            // Add a separator and an Exit menu item
-            _contextMenu.Items.Add(new ToolStripSeparator());
-            _contextMenu.Items.Add("Exit", null, OnExit);
-
-            // Assign the context menu to the notify icon
-            _notifyIcon.ContextMenuStrip = _contextMenu;
-
-            // Handle double-click
-            _notifyIcon.DoubleClick += (s, e) =>
-            {
-                // Show the main window
-                Show();
-                WindowState = FormWindowState.Normal;
-                ShowInTaskbar = true;
-            };
-
-            // Load UI controls
+            // Set the initial state of the auto-start checkbox
 
             checkRunAtLogin.Checked = PuTTYLauncher.Settings.RunAtLogin;
 
             // Load PuTTY sessions into the session picker combo box
+
             comboBoxPuttySession.Items.Add("(none)");
             foreach (var session in PuTTYLauncher.GetPuttySessions())
             {
@@ -81,18 +52,68 @@ namespace PuTTYLauncher
             }
             comboBoxPuttySession.SelectedIndex = 0;
 
-            // Load profiles into the list box
+            // Load profiles
+
+            appImage = appIcon?.ToBitmap();
+
+            listViewProfiles.Columns.Add("", listViewProfiles.Width - 4);
+
             if (PuTTYLauncher.Settings.Profiles.Count > 0)
             {
                 foreach (var profile in PuTTYLauncher.Settings.Profiles)
                 {
-                    listBoxProfiles.Items.Add(profile.Name);
+                    // Add profile to the context menu
+                    contextMenu.Items.Add(
+                        new ToolStripMenuItem(
+                            profile.Name,
+                            appImage,
+                            (s, e) => { PuTTYLauncher.LaunchPutty(profile); },
+                            profile.Key
+                            )
+                        );
+
+                    // Add profile to the profiles list
+                    listViewProfiles.Items.Add(
+                        new ListViewItem()
+                        {
+                            Name = profile.Key,
+                            Text = profile.Name
+                        });
                 }
 
-                listBoxProfiles.SelectedIndex = 0;
+                // Pick a profile to start selected
+                if (listViewProfiles.Items.Count > 1 && listViewProfiles.Items[0].Text.Equals("Default Settings"))
+                {
+                    listViewProfiles.Items[1].Selected = true;
+                }
+                else if (listViewProfiles.Items.Count > 0)
+                {
+                    listViewProfiles.Items[0].Selected = true;
+                }
             }
 
+            // Add a separator and an Exit menu item
+            contextMenu.Items.Add(new ToolStripSeparator());
+            contextMenu.Items.Add("Exit", null, OnExit);
+
+            // Assign the context menu to the notify icon
+            notifyIcon.ContextMenuStrip = contextMenu;
+
+            // Handle double-click
+            notifyIcon.DoubleClick += (s, e) =>
+            {
+                // Show the main window
+                Show();
+                WindowState = FormWindowState.Normal;
+                ShowInTaskbar = true;
+            };
+
             loadingData = false;
+        }
+
+        private void MainForm_Activated(object sender, EventArgs e)
+        {
+            listViewProfiles.Focus();
         }
 
         /// <summary>
@@ -100,28 +121,28 @@ namespace PuTTYLauncher
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void listBoxProfiles_SelectedIndexChanged(object sender, EventArgs e)
+        private void listViewProfiles_SelectedIndexChanged(object? sender, EventArgs? e)
         {
-            if (PuTTYLauncher.Settings == null || listBoxProfiles.SelectedItem == null)
+            if (PuTTYLauncher.Settings == null || listViewProfiles.SelectedItems.Count != 1)
                 return;
 
             // Find the selected connection profile
-            _selectedProfile = PuTTYLauncher.Settings.Profiles.FirstOrDefault(p => p.Name.Equals(listBoxProfiles.SelectedItem));
+            selectedProfile = PuTTYLauncher.Settings.Profiles.FirstOrDefault(p => p.Name.Equals(listViewProfiles.SelectedItems[0].Text));
 
             // Can't happen, but suppresses "might be null" warnings
-            if (_selectedProfile == null)
+            if (selectedProfile == null)
                 return;
 
             // And create a backup copy of the profile so we can detect changes
-            _selectedProfileBackup = _selectedProfile.Copy();
+            selectedProfileBackup = selectedProfile.Copy();
 
             // Suppress save button processing while we load the profile data
             loadingData = true;
 
-            if (_selectedProfile.Name.Equals("Default Settings"))
+            if (selectedProfile.Name.Equals("Default Settings"))
             {
-                textBoxProfileName.Text = _selectedProfile.Name;
-                comboBoxPuttySession.SelectedItem = _selectedProfile.Name;
+                textBoxProfileName.Text = selectedProfile.Name;
+                comboBoxPuttySession.SelectedItem = selectedProfile.Name;
                 textBoxUsername.Text = String.Empty;
                 textBoxPassword.Text = String.Empty;
                 textBoxProfileName.Enabled = false;
@@ -132,10 +153,10 @@ namespace PuTTYLauncher
             }
             else
             {
-                textBoxProfileName.Text = _selectedProfile.Name;
-                comboBoxPuttySession.SelectedItem = _selectedProfile.Session;
-                textBoxUsername.Text = _selectedProfile.User;
-                textBoxPassword.Text = _selectedProfile.Password;
+                textBoxProfileName.Text = selectedProfile.Name;
+                comboBoxPuttySession.SelectedItem = selectedProfile.Session;
+                textBoxUsername.Text = selectedProfile.User;
+                textBoxPassword.Text = selectedProfile.Password;
                 textBoxProfileName.Enabled = true;
                 comboBoxPuttySession.Enabled = true;
                 textBoxUsername.Enabled = true;
@@ -182,7 +203,7 @@ namespace PuTTYLauncher
         /// <param name="e"></param>
         private void OnExit(object? sender, EventArgs? e)
         {
-            _notifyIcon.Visible = false;
+            notifyIcon.Visible = false;
             Application.Exit();
         }
 
@@ -190,50 +211,71 @@ namespace PuTTYLauncher
 
         private void textBoxProfileName_TextChanged(object sender, EventArgs e)
         {
-            if (_selectedProfile != null && !loadingData)
+            if (selectedProfile != null && listViewProfiles.SelectedItems.Count == 1 && !loadingData)
             {
-                _selectedProfile.Name = textBoxProfileName.Text;
-                maybeSaveStatus();
+                string oldName = selectedProfile.Name;
+
+                selectedProfile.Name = textBoxProfileName.Text;
+
+                if (maybeSaveStatus())
+                {
+                    //Profile name was changed and saved
+
+                    //Update the list box
+                    listViewProfiles.SelectedIndexChanged -= listViewProfiles_SelectedIndexChanged;
+                    listViewProfiles.SelectedItems[0].Text = selectedProfile.Name;
+                    listViewProfiles.SelectedIndexChanged += listViewProfiles_SelectedIndexChanged;
+
+                    //And update the context menu
+                    ToolStripItem? contextMenuItem = contextMenu.Items.Find(listViewProfiles.SelectedItems[0].Name, false)[0];
+                    if (contextMenuItem != null)
+                    {
+                        int idx = contextMenu.Items.IndexOf(contextMenuItem);
+                        contextMenu.Items[idx].Text = selectedProfile.Name;
+                    }
+                }
             }
         }
 
         private void comboBoxPuttySession_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (_selectedProfile != null && !loadingData)
+            if (selectedProfile != null && !loadingData && comboBoxPuttySession.SelectedItem != null)
             {
-                _selectedProfile.Session = comboBoxPuttySession.SelectedText;
+                selectedProfile.Session = (string)comboBoxPuttySession.SelectedItem;
                 maybeSaveStatus();
             }
         }
 
         private void textBoxUsername_TextChanged(object sender, EventArgs e)
         {
-            if (_selectedProfile != null && !loadingData)
+            if (selectedProfile != null && !loadingData)
             {
-                _selectedProfile.User = textBoxUsername.Text;
+                selectedProfile.User = textBoxUsername.Text;
                 maybeSaveStatus();
             }
         }
 
         private void textBoxPassword_TextChanged(object sender, EventArgs e)
         {
-            if (_selectedProfile != null && !loadingData)
+            if (selectedProfile != null && !loadingData)
             {
-                _selectedProfile.Password = textBoxPassword.Text;
+                selectedProfile.Password = textBoxPassword.Text;
                 maybeSaveStatus();
             }
         }
 
-        private void maybeSaveStatus()
+        private bool maybeSaveStatus()
         {
-            if (!loadingData && listBoxProfiles.SelectedItem != null && _selectedProfile != null && _selectedProfileBackup != null && PuTTYLauncher.Settings != null)
+            bool saved = false;
+            if (!loadingData && listViewProfiles.SelectedItems.Count == 1 && selectedProfile != null && selectedProfileBackup != null && PuTTYLauncher.Settings != null)
             {
-                if (!_selectedProfile.IsSameAs(_selectedProfileBackup))
+                if (!selectedProfile.IsSameAs(selectedProfileBackup))
                 {
-                    //Save
-                    PuTTYLauncher.Settings.SaveToFile();
+                    //Save settings
+                    saved = PuTTYLauncher.Settings.SaveToFile();
                 }
             }
+            return saved;
         }
 
         // List double-ckick event handler ------------------------------------
@@ -243,16 +285,16 @@ namespace PuTTYLauncher
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void listBoxProfiles_DoubleClick(object sender, EventArgs e)
+        private void listViewProfiles_DoubleClick(object sender, EventArgs e)
         {
             launchSelectedProfile();
         }
 
         private void launchSelectedProfile()
         {
-            if (listBoxProfiles.SelectedItem != null && listBoxProfiles.SelectedIndex != -1 && PuTTYLauncher.Settings != null)
+            if (listViewProfiles.SelectedItems.Count == 1 && PuTTYLauncher.Settings != null)
             {
-                var selectedProfile = PuTTYLauncher.Settings.Profiles.FirstOrDefault(p => p.Name.Equals(listBoxProfiles.SelectedItem));
+                var selectedProfile = PuTTYLauncher.Settings.Profiles.FirstOrDefault(p => p.Name.Equals(listViewProfiles.SelectedItems[0].Text));
                 if (selectedProfile != null)
                     PuTTYLauncher.LaunchPutty(selectedProfile);
             }
@@ -280,7 +322,7 @@ namespace PuTTYLauncher
             {
                 newProfileMode = true;
 
-                listBoxProfiles.Enabled = false;
+                listViewProfiles.Enabled = false;
 
                 textBoxProfileName.Text = String.Empty;
                 comboBoxPuttySession.SelectedIndex = 0;
@@ -307,25 +349,45 @@ namespace PuTTYLauncher
 
                 //Reset
                 newProfileMode = false;
-                textBoxProfileName.Text = _selectedProfile?.Name;
-                comboBoxPuttySession.SelectedItem = _selectedProfile?.Session;
-                textBoxUsername.Text = _selectedProfile?.User;
-                textBoxPassword.Text = _selectedProfile?.Password;
+                textBoxProfileName.Text = selectedProfile?.Name;
+                comboBoxPuttySession.SelectedItem = selectedProfile?.Session;
+                textBoxUsername.Text = selectedProfile?.User;
+                textBoxPassword.Text = selectedProfile?.Password;
                 comboBoxPuttySession.SelectedIndex = 0;
                 textBoxUsername.Text = String.Empty;
                 textBoxPassword.Text = String.Empty;
-                listBoxProfiles.Enabled = true;
+                listViewProfiles.Enabled = true;
                 btnOpenSave.Enabled = true;
                 btnDeleteProfile.Enabled = true;
                 btnOpenSave.Text = "Open";
                 btnNewCancel.Text = "New";
-                listBoxProfiles.Focus();
+                listViewProfiles.Focus();
             }
         }
 
         private void btnDeleteProfile_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Delete profile not implemented", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            if (MessageBox.Show(
+                "Are you sure you want to delete this profile?",
+                Application.ProductName,
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                //Delete the profile
+                MessageBox.Show(
+                    "Well, you can't, because delete profile is not implemented yet!",
+                    Application.ProductName,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show(
+                    "Excellent, beause delete profile is not implemented yet!",
+                    Application.ProductName,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+            }
         }
     }
 }
