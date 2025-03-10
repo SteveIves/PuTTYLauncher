@@ -92,9 +92,21 @@ namespace PuTTYLauncher
                 }
             }
 
+            // Add a separator and an Edit profiles menu item
+            contextMenu.Items.Add(new ToolStripSeparator());
+            contextMenu.Items.Add("Edit profiles", null, (s, e) => {
+                Show();
+                WindowState = FormWindowState.Normal;
+                ShowInTaskbar = true;
+            });
+
+
             // Add a separator and an Exit menu item
             contextMenu.Items.Add(new ToolStripSeparator());
-            contextMenu.Items.Add("Exit", null, OnExit);
+            contextMenu.Items.Add("Exit", null, (s,e) => {
+                notifyIcon.Visible = false;
+                Application.Exit();
+            });
 
             // Assign the context menu to the notify icon
             notifyIcon.ContextMenuStrip = contextMenu;
@@ -199,17 +211,6 @@ namespace PuTTYLauncher
                 Hide();
                 ShowInTaskbar = false;
             }
-        }
-
-        /// <summary>
-        /// The user clicked the Exit menu item. Close the application.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void OnExit(object? sender, EventArgs? e)
-        {
-            notifyIcon.Visible = false;
-            Application.Exit();
         }
 
         // Field editing event handlers and logic -----------------------------
