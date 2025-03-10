@@ -111,6 +111,11 @@ namespace PuTTYLauncher
             loadingData = false;
         }
 
+        /// <summary>
+        /// The form was activated. Set focus to the profiles list.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MainForm_Activated(object sender, EventArgs e)
         {
             listViewProfiles.Focus();
@@ -209,6 +214,11 @@ namespace PuTTYLauncher
 
         // Field editing event handlers and logic -----------------------------
 
+        /// <summary>
+        /// The user changed the profile name field. Save it.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void textBoxProfileName_TextChanged(object sender, EventArgs e)
         {
             if (selectedProfile != null && listViewProfiles.SelectedItems.Count == 1 && !loadingData)
@@ -237,6 +247,11 @@ namespace PuTTYLauncher
             }
         }
 
+        /// <summary>
+        /// The user changed the PuTTY session field. Save it.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void comboBoxPuttySession_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (selectedProfile != null && !loadingData && comboBoxPuttySession.SelectedItem != null)
@@ -246,6 +261,11 @@ namespace PuTTYLauncher
             }
         }
 
+        /// <summary>
+        /// The user changed the username field. Save it.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void textBoxUsername_TextChanged(object sender, EventArgs e)
         {
             if (selectedProfile != null && !loadingData)
@@ -255,6 +275,11 @@ namespace PuTTYLauncher
             }
         }
 
+        /// <summary>
+        /// The user changed the password field. Encrypt the password and save it.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void textBoxPassword_TextChanged(object sender, EventArgs e)
         {
             if (selectedProfile != null && !loadingData)
@@ -264,6 +289,10 @@ namespace PuTTYLauncher
             }
         }
 
+        /// <summary>
+        /// Check if the profile has changed and save it if it has
+        /// </summary>
+        /// <returns></returns>
         private bool maybeSaveStatus()
         {
             bool saved = false;
@@ -302,6 +331,11 @@ namespace PuTTYLauncher
 
         // Button click event handlers ----------------------------------------
 
+        /// <summary>
+        /// The user clicked the "Open" or "Save" button.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnOpenSave_Click(object sender, EventArgs e)
         {
             if (newProfileMode)
@@ -316,6 +350,11 @@ namespace PuTTYLauncher
             }
         }
 
+        /// <summary>
+        /// The user clicked the "New" or "Cancel" button.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnNewCancel_Click(object sender, EventArgs e)
         {
             if (!newProfileMode)
@@ -366,6 +405,11 @@ namespace PuTTYLauncher
             }
         }
 
+        /// <summary>
+        /// The user clicked the "Delete Profile" button. Delete the selected profile.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnDeleteProfile_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show(
@@ -391,6 +435,11 @@ namespace PuTTYLauncher
             }
         }
 
+        /// <summary>
+        /// The user clicked the "Show Password" checkbox. Show or hide the password text.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void checkBoxShowPassword_CheckedChanged(object sender, EventArgs e)
         {
             textBoxPassword.PasswordChar = checkBoxShowPassword.Checked ? '\0' : '*';
