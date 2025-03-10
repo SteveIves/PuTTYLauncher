@@ -156,7 +156,7 @@ namespace PuTTYLauncher
                 textBoxProfileName.Text = selectedProfile.Name;
                 comboBoxPuttySession.SelectedItem = selectedProfile.Session;
                 textBoxUsername.Text = selectedProfile.User;
-                textBoxPassword.Text = selectedProfile.Password;
+                textBoxPassword.Text = DPAPIEncryption.Decrypt(selectedProfile.Password);
                 textBoxProfileName.Enabled = true;
                 comboBoxPuttySession.Enabled = true;
                 textBoxUsername.Enabled = true;
@@ -259,7 +259,7 @@ namespace PuTTYLauncher
         {
             if (selectedProfile != null && !loadingData)
             {
-                selectedProfile.Password = textBoxPassword.Text;
+                selectedProfile.Password = DPAPIEncryption.Encrypt(textBoxPassword.Text);
                 maybeSaveStatus();
             }
         }
@@ -352,7 +352,8 @@ namespace PuTTYLauncher
                 textBoxProfileName.Text = selectedProfile?.Name;
                 comboBoxPuttySession.SelectedItem = selectedProfile?.Session;
                 textBoxUsername.Text = selectedProfile?.User;
-                textBoxPassword.Text = selectedProfile?.Password;
+                if (selectedProfile?.Password != null)
+                    textBoxPassword.Text = DPAPIEncryption.Decrypt(selectedProfile.Password);
                 comboBoxPuttySession.SelectedIndex = 0;
                 textBoxUsername.Text = String.Empty;
                 textBoxPassword.Text = String.Empty;
@@ -388,6 +389,11 @@ namespace PuTTYLauncher
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
             }
+        }
+
+        private void checkBoxShowPassword_CheckedChanged(object sender, EventArgs e)
+        {
+            textBoxPassword.PasswordChar = checkBoxShowPassword.Checked ? '\0' : '*';
         }
     }
 }
