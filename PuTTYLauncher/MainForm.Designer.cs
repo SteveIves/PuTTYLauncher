@@ -159,7 +159,7 @@
             // linkLabelDocs
             // 
             linkLabelDocs.AutoSize = true;
-            linkLabelDocs.Location = new Point(701, 406);
+            linkLabelDocs.Location = new Point(724, 406);
             linkLabelDocs.Name = "linkLabelDocs";
             linkLabelDocs.Size = new Size(112, 20);
             linkLabelDocs.TabIndex = 13;
@@ -170,7 +170,7 @@
             // linkLabelProjectHome
             // 
             linkLabelProjectHome.AutoSize = true;
-            linkLabelProjectHome.Location = new Point(572, 406);
+            linkLabelProjectHome.Location = new Point(618, 406);
             linkLabelProjectHome.Name = "linkLabelProjectHome";
             linkLabelProjectHome.Size = new Size(100, 20);
             linkLabelProjectHome.TabIndex = 12;
@@ -181,7 +181,7 @@
             // checkBoxShowPassword
             // 
             checkBoxShowPassword.AutoSize = true;
-            checkBoxShowPassword.Location = new Point(800, 216);
+            checkBoxShowPassword.Location = new Point(794, 230);
             checkBoxShowPassword.Name = "checkBoxShowPassword";
             checkBoxShowPassword.Size = new Size(132, 24);
             checkBoxShowPassword.TabIndex = 8;
@@ -205,7 +205,7 @@
             // 
             // btnOpenSave
             // 
-            btnOpenSave.Location = new Point(523, 272);
+            btnOpenSave.Location = new Point(632, 272);
             btnOpenSave.Name = "btnOpenSave";
             btnOpenSave.Size = new Size(94, 29);
             btnOpenSave.TabIndex = 9;
@@ -215,7 +215,7 @@
             // 
             // btnNewCancel
             // 
-            btnNewCancel.Location = new Point(623, 272);
+            btnNewCancel.Location = new Point(732, 272);
             btnNewCancel.Name = "btnNewCancel";
             btnNewCancel.Size = new Size(94, 29);
             btnNewCancel.TabIndex = 10;
