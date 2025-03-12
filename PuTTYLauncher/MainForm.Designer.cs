@@ -72,10 +72,10 @@
             // 
             // buttonFindPuTTYPath
             // 
-            buttonFindPuTTYPath.Location = new Point(925, 34);
+            buttonFindPuTTYPath.Location = new Point(622, 32);
             buttonFindPuTTYPath.Name = "buttonFindPuTTYPath";
             buttonFindPuTTYPath.Size = new Size(31, 29);
-            buttonFindPuTTYPath.TabIndex = 4;
+            buttonFindPuTTYPath.TabIndex = 0;
             buttonFindPuTTYPath.Text = "...";
             buttonFindPuTTYPath.UseVisualStyleBackColor = true;
             buttonFindPuTTYPath.Click += buttonFindPuTTYPath_Click;
@@ -83,16 +83,16 @@
             // textBoxPuTTYPath
             // 
             textBoxPuTTYPath.Enabled = false;
-            textBoxPuTTYPath.Location = new Point(401, 35);
+            textBoxPuTTYPath.Location = new Point(98, 33);
             textBoxPuTTYPath.Name = "textBoxPuTTYPath";
             textBoxPuTTYPath.Size = new Size(525, 27);
-            textBoxPuTTYPath.TabIndex = 3;
+            textBoxPuTTYPath.TabIndex = 0;
             textBoxPuTTYPath.TextChanged += textBoxPuTTYPath_TextChanged;
             // 
             // labelPuTTYPath
             // 
             labelPuTTYPath.AutoSize = true;
-            labelPuTTYPath.Location = new Point(314, 38);
+            labelPuTTYPath.Location = new Point(11, 36);
             labelPuTTYPath.Name = "labelPuTTYPath";
             labelPuTTYPath.Size = new Size(81, 20);
             labelPuTTYPath.TabIndex = 2;
@@ -101,10 +101,10 @@
             // checkStartInTray
             // 
             checkStartInTray.AutoSize = true;
-            checkStartInTray.Location = new Point(152, 37);
+            checkStartInTray.Location = new Point(787, 35);
             checkStartInTray.Name = "checkStartInTray";
             checkStartInTray.Size = new Size(156, 24);
-            checkStartInTray.TabIndex = 1;
+            checkStartInTray.TabIndex = 2;
             checkStartInTray.Text = "Start in system tray";
             checkStartInTray.UseVisualStyleBackColor = true;
             checkStartInTray.CheckedChanged += checkStartInTray_CheckedChanged;
@@ -112,10 +112,10 @@
             // checkRunAtLogin
             // 
             checkRunAtLogin.AutoSize = true;
-            checkRunAtLogin.Location = new Point(35, 37);
+            checkRunAtLogin.Location = new Point(670, 35);
             checkRunAtLogin.Name = "checkRunAtLogin";
             checkRunAtLogin.Size = new Size(111, 24);
-            checkRunAtLogin.TabIndex = 0;
+            checkRunAtLogin.TabIndex = 1;
             checkRunAtLogin.Text = "Run at login";
             checkRunAtLogin.UseVisualStyleBackColor = true;
             checkRunAtLogin.CheckedChanged += checkBoxAutoStart_CheckedChanged;
@@ -151,7 +151,7 @@
             linkLabelDownloads.Location = new Point(842, 406);
             linkLabelDownloads.Name = "linkLabelDownloads";
             linkLabelDownloads.Size = new Size(84, 20);
-            linkLabelDownloads.TabIndex = 16;
+            linkLabelDownloads.TabIndex = 14;
             linkLabelDownloads.TabStop = true;
             linkLabelDownloads.Text = "Downloads";
             linkLabelDownloads.LinkClicked += linkLabel_LinkClicked;
@@ -162,7 +162,7 @@
             linkLabelDocs.Location = new Point(701, 406);
             linkLabelDocs.Name = "linkLabelDocs";
             linkLabelDocs.Size = new Size(112, 20);
-            linkLabelDocs.TabIndex = 15;
+            linkLabelDocs.TabIndex = 13;
             linkLabelDocs.TabStop = true;
             linkLabelDocs.Text = "Documentation";
             linkLabelDocs.LinkClicked += linkLabel_LinkClicked;
@@ -173,7 +173,7 @@
             linkLabelProjectHome.Location = new Point(572, 406);
             linkLabelProjectHome.Name = "linkLabelProjectHome";
             linkLabelProjectHome.Size = new Size(100, 20);
-            linkLabelProjectHome.TabIndex = 11;
+            linkLabelProjectHome.TabIndex = 12;
             linkLabelProjectHome.TabStop = true;
             linkLabelProjectHome.Text = "Project Home";
             linkLabelProjectHome.LinkClicked += linkLabel_LinkClicked;
@@ -181,10 +181,10 @@
             // checkBoxShowPassword
             // 
             checkBoxShowPassword.AutoSize = true;
-            checkBoxShowPassword.Location = new Point(794, 166);
+            checkBoxShowPassword.Location = new Point(800, 216);
             checkBoxShowPassword.Name = "checkBoxShowPassword";
             checkBoxShowPassword.Size = new Size(132, 24);
-            checkBoxShowPassword.TabIndex = 7;
+            checkBoxShowPassword.TabIndex = 8;
             checkBoxShowPassword.Text = "Show &Password";
             checkBoxShowPassword.UseVisualStyleBackColor = true;
             checkBoxShowPassword.CheckedChanged += checkBoxShowPassword_CheckedChanged;
@@ -197,7 +197,7 @@
             listViewProfiles.MultiSelect = false;
             listViewProfiles.Name = "listViewProfiles";
             listViewProfiles.Size = new Size(363, 393);
-            listViewProfiles.TabIndex = 2;
+            listViewProfiles.TabIndex = 3;
             listViewProfiles.UseCompatibleStateImageBehavior = false;
             listViewProfiles.View = View.Details;
             listViewProfiles.SelectedIndexChanged += listViewProfiles_SelectedIndexChanged;
@@ -205,20 +205,20 @@
             // 
             // btnOpenSave
             // 
-            btnOpenSave.Location = new Point(523, 212);
+            btnOpenSave.Location = new Point(523, 272);
             btnOpenSave.Name = "btnOpenSave";
             btnOpenSave.Size = new Size(94, 29);
-            btnOpenSave.TabIndex = 8;
+            btnOpenSave.TabIndex = 9;
             btnOpenSave.Text = "&Open";
             btnOpenSave.UseVisualStyleBackColor = true;
             btnOpenSave.Click += btnOpenSave_Click;
             // 
             // btnNewCancel
             // 
-            btnNewCancel.Location = new Point(623, 212);
+            btnNewCancel.Location = new Point(623, 272);
             btnNewCancel.Name = "btnNewCancel";
             btnNewCancel.Size = new Size(94, 29);
-            btnNewCancel.TabIndex = 9;
+            btnNewCancel.TabIndex = 10;
             btnNewCancel.Text = "&New";
             btnNewCancel.UseVisualStyleBackColor = true;
             btnNewCancel.Click += btnNewCancel_Click;
@@ -226,39 +226,39 @@
             // btnDeleteProfile
             // 
             btnDeleteProfile.Enabled = false;
-            btnDeleteProfile.Location = new Point(832, 212);
+            btnDeleteProfile.Location = new Point(832, 272);
             btnDeleteProfile.Name = "btnDeleteProfile";
             btnDeleteProfile.Size = new Size(94, 29);
-            btnDeleteProfile.TabIndex = 10;
+            btnDeleteProfile.TabIndex = 11;
             btnDeleteProfile.Text = "&Delete";
             btnDeleteProfile.UseVisualStyleBackColor = true;
             btnDeleteProfile.Click += btnDeleteProfile_Click;
             // 
             // textBoxPassword
             // 
-            textBoxPassword.Location = new Point(523, 133);
+            textBoxPassword.Location = new Point(523, 177);
             textBoxPassword.Name = "textBoxPassword";
             textBoxPassword.PasswordChar = '*';
             textBoxPassword.Size = new Size(403, 27);
-            textBoxPassword.TabIndex = 6;
+            textBoxPassword.TabIndex = 7;
             textBoxPassword.TextChanged += textBoxPassword_TextChanged;
             // 
             // textBoxUsername
             // 
-            textBoxUsername.Location = new Point(523, 100);
+            textBoxUsername.Location = new Point(523, 129);
             textBoxUsername.Name = "textBoxUsername";
             textBoxUsername.Size = new Size(403, 27);
-            textBoxUsername.TabIndex = 5;
+            textBoxUsername.TabIndex = 6;
             textBoxUsername.TextChanged += textBoxUsername_TextChanged;
             // 
             // comboBoxPuttySession
             // 
             comboBoxPuttySession.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxPuttySession.FormattingEnabled = true;
-            comboBoxPuttySession.Location = new Point(523, 66);
+            comboBoxPuttySession.Location = new Point(523, 81);
             comboBoxPuttySession.Name = "comboBoxPuttySession";
             comboBoxPuttySession.Size = new Size(403, 28);
-            comboBoxPuttySession.TabIndex = 4;
+            comboBoxPuttySession.TabIndex = 5;
             comboBoxPuttySession.SelectedIndexChanged += comboBoxPuttySession_SelectedIndexChanged;
             // 
             // textBoxProfileName
@@ -266,13 +266,13 @@
             textBoxProfileName.Location = new Point(523, 33);
             textBoxProfileName.Name = "textBoxProfileName";
             textBoxProfileName.Size = new Size(403, 27);
-            textBoxProfileName.TabIndex = 3;
+            textBoxProfileName.TabIndex = 4;
             textBoxProfileName.TextChanged += textBoxProfileName_TextChanged;
             // 
             // lblPassword
             // 
             lblPassword.AutoSize = true;
-            lblPassword.Location = new Point(403, 136);
+            lblPassword.Location = new Point(403, 180);
             lblPassword.Name = "lblPassword";
             lblPassword.Size = new Size(70, 20);
             lblPassword.TabIndex = 5;
@@ -281,7 +281,7 @@
             // lblUsername
             // 
             lblUsername.AutoSize = true;
-            lblUsername.Location = new Point(403, 103);
+            lblUsername.Location = new Point(403, 132);
             lblUsername.Name = "lblUsername";
             lblUsername.Size = new Size(75, 20);
             lblUsername.TabIndex = 4;
@@ -290,7 +290,7 @@
             // lblPuttySession
             // 
             lblPuttySession.AutoSize = true;
-            lblPuttySession.Location = new Point(403, 69);
+            lblPuttySession.Location = new Point(403, 84);
             lblPuttySession.Name = "lblPuttySession";
             lblPuttySession.Size = new Size(102, 20);
             lblPuttySession.TabIndex = 3;
