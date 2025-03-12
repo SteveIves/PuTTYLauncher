@@ -30,6 +30,9 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             groupBoxSettings = new GroupBox();
+            buttonFindPuTTYPath = new Button();
+            textBoxPuTTYPath = new TextBox();
+            labelPuTTYPath = new Label();
             checkStartInTray = new CheckBox();
             checkRunAtLogin = new CheckBox();
             groupBoxMain = new GroupBox();
@@ -52,6 +55,9 @@
             // 
             // groupBoxSettings
             // 
+            groupBoxSettings.Controls.Add(buttonFindPuTTYPath);
+            groupBoxSettings.Controls.Add(textBoxPuTTYPath);
+            groupBoxSettings.Controls.Add(labelPuTTYPath);
             groupBoxSettings.Controls.Add(checkStartInTray);
             groupBoxSettings.Controls.Add(checkRunAtLogin);
             groupBoxSettings.Location = new Point(12, 0);
@@ -61,10 +67,38 @@
             groupBoxSettings.TabStop = false;
             groupBoxSettings.Text = "Settings";
             // 
+            // buttonFindPuTTYPath
+            // 
+            buttonFindPuTTYPath.Location = new Point(925, 34);
+            buttonFindPuTTYPath.Name = "buttonFindPuTTYPath";
+            buttonFindPuTTYPath.Size = new Size(31, 29);
+            buttonFindPuTTYPath.TabIndex = 4;
+            buttonFindPuTTYPath.Text = "...";
+            buttonFindPuTTYPath.UseVisualStyleBackColor = true;
+            buttonFindPuTTYPath.Click += buttonFindPuTTYPath_Click;
+            // 
+            // textBoxPuTTYPath
+            // 
+            textBoxPuTTYPath.Enabled = false;
+            textBoxPuTTYPath.Location = new Point(401, 35);
+            textBoxPuTTYPath.Name = "textBoxPuTTYPath";
+            textBoxPuTTYPath.Size = new Size(525, 27);
+            textBoxPuTTYPath.TabIndex = 3;
+            textBoxPuTTYPath.TextChanged += textBoxPuTTYPath_TextChanged;
+            // 
+            // labelPuTTYPath
+            // 
+            labelPuTTYPath.AutoSize = true;
+            labelPuTTYPath.Location = new Point(314, 38);
+            labelPuTTYPath.Name = "labelPuTTYPath";
+            labelPuTTYPath.Size = new Size(81, 20);
+            labelPuTTYPath.TabIndex = 2;
+            labelPuTTYPath.Text = "PuTTY Path";
+            // 
             // checkStartInTray
             // 
             checkStartInTray.AutoSize = true;
-            checkStartInTray.Location = new Point(170, 37);
+            checkStartInTray.Location = new Point(152, 37);
             checkStartInTray.Name = "checkStartInTray";
             checkStartInTray.Size = new Size(156, 24);
             checkStartInTray.TabIndex = 1;
@@ -276,5 +310,8 @@
         private ListView listViewProfiles;
         private CheckBox checkBoxShowPassword;
         private CheckBox checkStartInTray;
+        private TextBox textBoxPuTTYPath;
+        private Label labelPuTTYPath;
+        private Button buttonFindPuTTYPath;
     }
 }

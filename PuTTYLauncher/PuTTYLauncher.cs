@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using Microsoft.Win32;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace PuTTYLauncher
 {
@@ -58,6 +59,36 @@ namespace PuTTYLauncher
             Application.Run(new MainForm());
         }
 
+        public static string GetDefaultPuTTYExecutable()
+        {
+            return Path.Combine(GetDefaultPuTTYFolder(), "putty.exe");
+        }
+
+        public static string GetDefaultPuTTYFolder()
+        {
+            string programFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+            string programFilesX86 = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
+            string systemDrive = Environment.GetEnvironmentVariable("SystemDrive") ?? "C:\\";
+
+            if (RuntimeInformation.OSArchitecture == Architecture.X64 ||
+                RuntimeInformation.OSArchitecture == Architecture.X86)
+            {
+                if (Directory.Exists(Path.Combine(programFiles, "PuTTY")))
+                    return Path.Combine(programFiles, "PuTTY");
+
+                if (Directory.Exists(Path.Combine(programFilesX86, "PuTTY")))
+                    return Path.Combine(programFilesX86, "PuTTY");
+            }
+            else if (RuntimeInformation.OSArchitecture == Architecture.Arm64 ||
+                     RuntimeInformation.OSArchitecture == Architecture.Arm)
+            {
+                if (Directory.Exists(Path.Combine(programFiles, "PuTTY")))
+                    return Path.Combine(programFiles, "PuTTY");
+            }
+
+            return systemDrive;
+        }
+        
         /// <summary>
         /// Launch PuTTY with the given profile
         /// </summary>

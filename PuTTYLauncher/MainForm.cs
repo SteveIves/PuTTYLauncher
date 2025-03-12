@@ -42,6 +42,10 @@ namespace PuTTYLauncher
             checkRunAtLogin.Checked = PuTTYLauncher.Settings.RunAtLogin;
             checkStartInTray.Checked = PuTTYLauncher.Settings.StartInTray;
 
+            // Show the current PuTTY path
+
+            textBoxPuTTYPath.Text = PuTTYLauncher.Settings.PuTTYPath;
+
             // Load PuTTY sessions into the session picker combo box
 
             comboBoxPuttySession.Items.Add("(none)");
@@ -320,6 +324,22 @@ namespace PuTTYLauncher
         }
 
         /// <summary>
+        /// The user changed the PuTTY path value
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void textBoxPuTTYPath_TextChanged(object sender, EventArgs e)
+        {
+            if (PuTTYLauncher.Settings != null)
+            {
+                if (File.Exists(textBoxPuTTYPath.Text))
+                {
+                    PuTTYLauncher.Settings.PuTTYPath = textBoxPuTTYPath.Text;
+                }
+            }
+        }
+
+        /// <summary>
         /// Check if the profile has changed and save it if it has
         /// </summary>
         /// <returns></returns>
@@ -467,6 +487,11 @@ namespace PuTTYLauncher
                 textBoxUsername.Text = String.Empty;
                 textBoxPassword.Text = String.Empty;
 
+                textBoxProfileName.Enabled = true;
+                comboBoxPuttySession.Enabled = true;
+                textBoxUsername.Enabled = true;
+                textBoxPassword.Enabled = true;
+
                 btnDeleteProfile.Enabled = false;
                 btnOpenSave.Text = "Save";
                 btnNewCancel.Text = "Cancel";
@@ -552,6 +577,30 @@ namespace PuTTYLauncher
 
                 listViewProfiles.Focus();
 
+            }
+        }
+
+        private void buttonFindPuTTYPath_Click(object sender, EventArgs e)
+        {
+            string defaultFolder = PuTTYLauncher.GetDefaultPuTTYFolder();
+            string defaultFile = Path.Combine(defaultFolder, "putty.exe");
+
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.InitialDirectory = defaultFolder;
+                openFileDialog.Filter = "PuTTY Executable (putty.exe)|putty.exe";
+                openFileDialog.Title = "Locate putty.exe";
+
+                // If putty.exe exists in the default location, pre-select it
+                if (File.Exists(defaultFile))
+                {
+                    openFileDialog.FileName = defaultFile;
+                }
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    textBoxPuTTYPath.Text = openFileDialog.FileName;
+                }
             }
         }
     }

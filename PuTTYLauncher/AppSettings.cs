@@ -16,12 +16,14 @@ namespace PuTTYLauncher
             AppSettings? settings = null;
 
             // Do we have a user settings file?
+            bool justCreated = false;
 
             if (!File.Exists(SettingsFile))
             {
                 try
                 {
                     File.Copy(DefaultSettingsFile, SettingsFile);
+                    justCreated = true;
                 }
                 catch (Exception ex)
                 {
@@ -38,6 +40,11 @@ namespace PuTTYLauncher
                 if (settings != null)
                 {
                     initialLoadSettings = false;
+                    if (justCreated)
+                    {
+                        settings.PuTTYPath = PuTTYLauncher.GetDefaultPuTTYExecutable();
+                        settings.SaveToFile();
+                    }
                 }
             }
             catch (Exception ex)
@@ -114,7 +121,7 @@ namespace PuTTYLauncher
 
         //PuTTY path
 
-        private string puTTYPath = "C:\\Program Files\\PuTTY\\putty.exe";
+        private string puTTYPath = String.Empty;
 
         public string PuTTYPath
         {
