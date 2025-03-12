@@ -93,6 +93,25 @@ namespace PuTTYLauncher
             }
         }
 
+        // Start in tray
+
+        private bool startInTray = false;
+        public bool StartInTray
+        {
+            get => startInTray;
+            set
+            {
+                if (startInTray != value)
+                {
+                    startInTray = value;
+                    if (!initialLoadSettings)
+                    {
+                        SaveToFile();
+                    }
+                }
+            }
+        }
+
         //PuTTY path
 
         private string puTTYPath = "C:\\Program Files\\PuTTY\\putty.exe";

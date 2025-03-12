@@ -1,7 +1,4 @@
 
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using System.Collections.Generic;
-
 namespace PuTTYLauncher
 {
     public partial class MainForm : Form
@@ -40,9 +37,10 @@ namespace PuTTYLauncher
                 return;
             }
 
-            // Set the initial state of the auto-start checkbox
+            // Set the initial state of the auto-start and start in tray checkboxes
 
             checkRunAtLogin.Checked = PuTTYLauncher.Settings.RunAtLogin;
+            checkStartInTray.Checked = PuTTYLauncher.Settings.StartInTray;
 
             // Load PuTTY sessions into the session picker combo box
 
@@ -123,6 +121,10 @@ namespace PuTTYLauncher
                 ShowInTaskbar = true;
             };
 
+            //Set the initial window visibility
+            ShowInTaskbar = !checkStartInTray.Checked;
+            WindowState = checkStartInTray.Checked ? FormWindowState.Minimized : FormWindowState.Normal;
+
             loadingData = false;
         }
 
@@ -198,6 +200,30 @@ namespace PuTTYLauncher
             {
                 PuTTYLauncher.Settings.RunAtLogin = checkRunAtLogin.Checked;
             }
+        }
+
+        /// <summary>
+        /// The user changed the start in tray setting
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void checkStartInTray_CheckedChanged(object sender, EventArgs e)
+        {
+            if (PuTTYLauncher.Settings != null)
+            {
+                PuTTYLauncher.Settings.StartInTray = checkStartInTray.Checked;
+            }
+
+        }
+
+        /// <summary>
+        /// The user clicked the "Show Password" checkbox. Show or hide the password text.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void checkBoxShowPassword_CheckedChanged(object sender, EventArgs e)
+        {
+            textBoxPassword.PasswordChar = checkBoxShowPassword.Checked ? '\0' : '*';
         }
 
         /// <summary>
@@ -350,27 +376,57 @@ namespace PuTTYLauncher
                 if (pendingListViewItem == null || selectedProfile == null || PuTTYLauncher.Settings == null)
                     return;
 
-                selectedProfile = new ConnectionProfile() { 
+                //Create the new profile
+                selectedProfile = new ConnectionProfile()
+                {
                     Name = textBoxProfileName.Text,
                     Session = comboBoxPuttySession.Text,
                     User = textBoxUsername.Text,
                     Password = DPAPIEncryption.Encrypt(textBoxPassword.Text)
                 };
 
+                //Add the new profile to settings and save to disk
                 PuTTYLauncher.Settings.Profiles.Add(selectedProfile);
                 PuTTYLauncher.Settings.SaveToFile();
 
+                //Find the index of the first ToolStripSeparator in the context menu
+                int newItemIndex = contextMenu.Items
+                    .OfType<ToolStripSeparator>()
+                    .Select(item => contextMenu.Items.IndexOf(item))
+                    .FirstOrDefault();
+
+                // If no separator is found (can't happen) add to the end
+                if (newItemIndex == 0 && !(contextMenu.Items[0] is ToolStripSeparator))
+                    newItemIndex = contextMenu.Items.Count;
+
+                // Add profile to the context menu
+                contextMenu.Items.Insert(newItemIndex,
+                    new ToolStripMenuItem(
+                    selectedProfile.Name,
+                    appImage,
+                        (s, e) => { PuTTYLauncher.LaunchPutty(selectedProfile); },
+                        selectedProfile.Key
+                        )
+                    );
+
+                //Copy the new profile so we can detect changes later
+                selectedProfileBackup = selectedProfile.Copy();
+
+                //Update the information in the "New Profile" list item added earlier
                 pendingListViewItem.Name = selectedProfile.Key;
                 pendingListViewItem.Text = selectedProfile.Name;
                 pendingListViewItem = null;
 
+                //Restore normal UI updating when the selected profile changes
                 newProfileMode = false;
                 listViewProfiles.SelectedIndexChanged += listViewProfiles_SelectedIndexChanged;
 
+                //Reset the UI to normal
                 btnDeleteProfile.Enabled = true;
                 btnOpenSave.Text = "Open";
                 btnNewCancel.Text = "New";
 
+                //Re-enable and focus the prodiles list.
                 listViewProfiles.Enabled = true;
                 listViewProfiles.Focus();
             }
@@ -451,37 +507,52 @@ namespace PuTTYLauncher
         /// <param name="e"></param>
         private void btnDeleteProfile_Click(object sender, EventArgs e)
         {
+            //Can't happen, but suppresses "might be null" warnings
+            if (selectedProfile == null || PuTTYLauncher.Settings == null)
+                return;
+
             if (MessageBox.Show(
                 "Are you sure you want to delete this profile?",
                 Application.ProductName,
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                //Delete the profile
-                MessageBox.Show(
-                    "Well, you can't, because delete profile is not implemented yet!",
-                    Application.ProductName,
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
-            }
-            else
-            {
-                MessageBox.Show(
-                    "Excellent, beause delete profile is not implemented yet!",
-                    Application.ProductName,
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
-            }
-        }
+                //Remove the profile from the context meuu
+                contextMenu.Items.RemoveByKey(selectedProfile.Key);
 
-        /// <summary>
-        /// The user clicked the "Show Password" checkbox. Show or hide the password text.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void checkBoxShowPassword_CheckedChanged(object sender, EventArgs e)
-        {
-            textBoxPassword.PasswordChar = checkBoxShowPassword.Checked ? '\0' : '*';
+                //Get the index of the item to be deleted
+                var idxToRemove = listViewProfiles.Items.IndexOfKey(selectedProfile.Key);
+
+                //Calculate the index of the item to be selected after the current item is removed
+                //We don't need to worry about index 0 because the Delete button will not be enabled
+                int newSelectedIndex = idxToRemove;
+                if (idxToRemove > listViewProfiles.Items.Count - 2)
+                    newSelectedIndex = listViewProfiles.Items.Count - 2;
+
+                //Delete the profile from the settings file
+                PuTTYLauncher.Settings.Profiles.Remove(selectedProfile);
+                PuTTYLauncher.Settings.SaveToFile();
+
+                //Remove the profile from the list
+                listViewProfiles.Items.RemoveAt(idxToRemove);
+
+                //Select the next profile
+                listViewProfiles.Items[newSelectedIndex].Selected = true;
+                listViewProfiles.Items[newSelectedIndex].EnsureVisible();
+
+                // Record the newly selected profile
+                selectedProfile = PuTTYLauncher.Settings.Profiles.FirstOrDefault(p => p.Key.Equals(listViewProfiles.SelectedItems[0].Name));
+
+                // Can't happen, but suppresses "might be null" warnings
+                if (selectedProfile == null)
+                    return;
+
+                // And create a backup copy of the profile so we can detect changes
+                selectedProfileBackup = selectedProfile.Copy();
+
+                listViewProfiles.Focus();
+
+            }
         }
     }
 }

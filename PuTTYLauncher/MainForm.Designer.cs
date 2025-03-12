@@ -30,8 +30,10 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             groupBoxSettings = new GroupBox();
+            checkStartInTray = new CheckBox();
             checkRunAtLogin = new CheckBox();
             groupBoxMain = new GroupBox();
+            checkBoxShowPassword = new CheckBox();
             listViewProfiles = new ListView();
             btnOpenSave = new Button();
             btnNewCancel = new Button();
@@ -44,13 +46,13 @@
             lblUsername = new Label();
             lblPuttySession = new Label();
             lblProfileName = new Label();
-            checkBoxShowPassword = new CheckBox();
             groupBoxSettings.SuspendLayout();
             groupBoxMain.SuspendLayout();
             SuspendLayout();
             // 
             // groupBoxSettings
             // 
+            groupBoxSettings.Controls.Add(checkStartInTray);
             groupBoxSettings.Controls.Add(checkRunAtLogin);
             groupBoxSettings.Location = new Point(12, 0);
             groupBoxSettings.Name = "groupBoxSettings";
@@ -58,6 +60,17 @@
             groupBoxSettings.TabIndex = 0;
             groupBoxSettings.TabStop = false;
             groupBoxSettings.Text = "Settings";
+            // 
+            // checkStartInTray
+            // 
+            checkStartInTray.AutoSize = true;
+            checkStartInTray.Location = new Point(170, 37);
+            checkStartInTray.Name = "checkStartInTray";
+            checkStartInTray.Size = new Size(156, 24);
+            checkStartInTray.TabIndex = 1;
+            checkStartInTray.Text = "Start in system tray";
+            checkStartInTray.UseVisualStyleBackColor = true;
+            checkStartInTray.CheckedChanged += checkStartInTray_CheckedChanged;
             // 
             // checkRunAtLogin
             // 
@@ -92,6 +105,17 @@
             groupBoxMain.TabStop = false;
             groupBoxMain.Text = "Connection Profiles";
             // 
+            // checkBoxShowPassword
+            // 
+            checkBoxShowPassword.AutoSize = true;
+            checkBoxShowPassword.Location = new Point(794, 166);
+            checkBoxShowPassword.Name = "checkBoxShowPassword";
+            checkBoxShowPassword.Size = new Size(132, 24);
+            checkBoxShowPassword.TabIndex = 7;
+            checkBoxShowPassword.Text = "Show &Password";
+            checkBoxShowPassword.UseVisualStyleBackColor = true;
+            checkBoxShowPassword.CheckedChanged += checkBoxShowPassword_CheckedChanged;
+            // 
             // listViewProfiles
             // 
             listViewProfiles.FullRowSelect = true;
@@ -100,7 +124,7 @@
             listViewProfiles.MultiSelect = false;
             listViewProfiles.Name = "listViewProfiles";
             listViewProfiles.Size = new Size(363, 393);
-            listViewProfiles.TabIndex = 1;
+            listViewProfiles.TabIndex = 2;
             listViewProfiles.UseCompatibleStateImageBehavior = false;
             listViewProfiles.View = View.Details;
             listViewProfiles.SelectedIndexChanged += listViewProfiles_SelectedIndexChanged;
@@ -111,7 +135,7 @@
             btnOpenSave.Location = new Point(523, 212);
             btnOpenSave.Name = "btnOpenSave";
             btnOpenSave.Size = new Size(94, 29);
-            btnOpenSave.TabIndex = 7;
+            btnOpenSave.TabIndex = 8;
             btnOpenSave.Text = "&Open";
             btnOpenSave.UseVisualStyleBackColor = true;
             btnOpenSave.Click += btnOpenSave_Click;
@@ -121,7 +145,7 @@
             btnNewCancel.Location = new Point(623, 212);
             btnNewCancel.Name = "btnNewCancel";
             btnNewCancel.Size = new Size(94, 29);
-            btnNewCancel.TabIndex = 8;
+            btnNewCancel.TabIndex = 9;
             btnNewCancel.Text = "&New";
             btnNewCancel.UseVisualStyleBackColor = true;
             btnNewCancel.Click += btnNewCancel_Click;
@@ -132,7 +156,7 @@
             btnDeleteProfile.Location = new Point(832, 212);
             btnDeleteProfile.Name = "btnDeleteProfile";
             btnDeleteProfile.Size = new Size(94, 29);
-            btnDeleteProfile.TabIndex = 9;
+            btnDeleteProfile.TabIndex = 10;
             btnDeleteProfile.Text = "&Delete";
             btnDeleteProfile.UseVisualStyleBackColor = true;
             btnDeleteProfile.Click += btnDeleteProfile_Click;
@@ -143,7 +167,7 @@
             textBoxPassword.Name = "textBoxPassword";
             textBoxPassword.PasswordChar = '*';
             textBoxPassword.Size = new Size(403, 27);
-            textBoxPassword.TabIndex = 5;
+            textBoxPassword.TabIndex = 6;
             textBoxPassword.TextChanged += textBoxPassword_TextChanged;
             // 
             // textBoxUsername
@@ -151,7 +175,7 @@
             textBoxUsername.Location = new Point(523, 100);
             textBoxUsername.Name = "textBoxUsername";
             textBoxUsername.Size = new Size(403, 27);
-            textBoxUsername.TabIndex = 4;
+            textBoxUsername.TabIndex = 5;
             textBoxUsername.TextChanged += textBoxUsername_TextChanged;
             // 
             // comboBoxPuttySession
@@ -161,7 +185,7 @@
             comboBoxPuttySession.Location = new Point(523, 66);
             comboBoxPuttySession.Name = "comboBoxPuttySession";
             comboBoxPuttySession.Size = new Size(403, 28);
-            comboBoxPuttySession.TabIndex = 3;
+            comboBoxPuttySession.TabIndex = 4;
             comboBoxPuttySession.SelectedIndexChanged += comboBoxPuttySession_SelectedIndexChanged;
             // 
             // textBoxProfileName
@@ -169,7 +193,7 @@
             textBoxProfileName.Location = new Point(523, 33);
             textBoxProfileName.Name = "textBoxProfileName";
             textBoxProfileName.Size = new Size(403, 27);
-            textBoxProfileName.TabIndex = 2;
+            textBoxProfileName.TabIndex = 3;
             textBoxProfileName.TextChanged += textBoxProfileName_TextChanged;
             // 
             // lblPassword
@@ -207,17 +231,6 @@
             lblProfileName.Size = new Size(93, 20);
             lblProfileName.TabIndex = 2;
             lblProfileName.Text = "Profile name";
-            // 
-            // checkBoxShowPassword
-            // 
-            checkBoxShowPassword.AutoSize = true;
-            checkBoxShowPassword.Location = new Point(794, 166);
-            checkBoxShowPassword.Name = "checkBoxShowPassword";
-            checkBoxShowPassword.Size = new Size(132, 24);
-            checkBoxShowPassword.TabIndex = 6;
-            checkBoxShowPassword.Text = "Show &Password";
-            checkBoxShowPassword.UseVisualStyleBackColor = true;
-            checkBoxShowPassword.CheckedChanged += checkBoxShowPassword_CheckedChanged;
             // 
             // MainForm
             // 
@@ -262,5 +275,6 @@
         private Button btnOpenSave;
         private ListView listViewProfiles;
         private CheckBox checkBoxShowPassword;
+        private CheckBox checkStartInTray;
     }
 }
