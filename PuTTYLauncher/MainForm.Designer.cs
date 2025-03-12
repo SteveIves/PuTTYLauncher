@@ -36,6 +36,9 @@
             checkStartInTray = new CheckBox();
             checkRunAtLogin = new CheckBox();
             groupBoxMain = new GroupBox();
+            linkLabelDownloads = new LinkLabel();
+            linkLabelDocs = new LinkLabel();
+            linkLabelProjectHome = new LinkLabel();
             checkBoxShowPassword = new CheckBox();
             listViewProfiles = new ListView();
             btnOpenSave = new Button();
@@ -119,6 +122,9 @@
             // 
             // groupBoxMain
             // 
+            groupBoxMain.Controls.Add(linkLabelDownloads);
+            groupBoxMain.Controls.Add(linkLabelDocs);
+            groupBoxMain.Controls.Add(linkLabelProjectHome);
             groupBoxMain.Controls.Add(checkBoxShowPassword);
             groupBoxMain.Controls.Add(listViewProfiles);
             groupBoxMain.Controls.Add(btnOpenSave);
@@ -138,6 +144,39 @@
             groupBoxMain.TabIndex = 2;
             groupBoxMain.TabStop = false;
             groupBoxMain.Text = "Connection Profiles";
+            // 
+            // linkLabelDownloads
+            // 
+            linkLabelDownloads.AutoSize = true;
+            linkLabelDownloads.Location = new Point(842, 406);
+            linkLabelDownloads.Name = "linkLabelDownloads";
+            linkLabelDownloads.Size = new Size(84, 20);
+            linkLabelDownloads.TabIndex = 16;
+            linkLabelDownloads.TabStop = true;
+            linkLabelDownloads.Text = "Downloads";
+            linkLabelDownloads.LinkClicked += linkLabel_LinkClicked;
+            // 
+            // linkLabelDocs
+            // 
+            linkLabelDocs.AutoSize = true;
+            linkLabelDocs.Location = new Point(701, 406);
+            linkLabelDocs.Name = "linkLabelDocs";
+            linkLabelDocs.Size = new Size(112, 20);
+            linkLabelDocs.TabIndex = 15;
+            linkLabelDocs.TabStop = true;
+            linkLabelDocs.Text = "Documentation";
+            linkLabelDocs.LinkClicked += linkLabel_LinkClicked;
+            // 
+            // linkLabelProjectHome
+            // 
+            linkLabelProjectHome.AutoSize = true;
+            linkLabelProjectHome.Location = new Point(572, 406);
+            linkLabelProjectHome.Name = "linkLabelProjectHome";
+            linkLabelProjectHome.Size = new Size(100, 20);
+            linkLabelProjectHome.TabIndex = 11;
+            linkLabelProjectHome.TabStop = true;
+            linkLabelProjectHome.Text = "Project Home";
+            linkLabelProjectHome.LinkClicked += linkLabel_LinkClicked;
             // 
             // checkBoxShowPassword
             // 
@@ -313,5 +352,8 @@
         private TextBox textBoxPuTTYPath;
         private Label labelPuTTYPath;
         private Button buttonFindPuTTYPath;
+        private LinkLabel linkLabelProjectHome;
+        private LinkLabel linkLabelDownloads;
+        private LinkLabel linkLabelDocs;
     }
 }

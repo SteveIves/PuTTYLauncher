@@ -1,4 +1,6 @@
 
+using System.Diagnostics;
+
 namespace PuTTYLauncher
 {
     public partial class MainForm : Form
@@ -124,6 +126,35 @@ namespace PuTTYLauncher
                 WindowState = FormWindowState.Normal;
                 ShowInTaskbar = true;
             };
+
+            //Configure the URIs for the LinkLabels
+
+            linkLabelProjectHome.Links.Add(
+                new LinkLabel.Link() 
+                {
+                    Name = "project home",
+                    LinkData = "https://github.com/SteveIves/PuTTYLauncher", 
+                    Start = 0, 
+                    Length = linkLabelProjectHome.Text.Length 
+                });
+
+            linkLabelDocs.Links.Add(
+                new LinkLabel.Link()
+                {
+                    Name = "documentation",
+                    LinkData = "https://github.com/SteveIves/PuTTYLauncher/wiki",
+                    Start = 0,
+                    Length = linkLabelDocs.Text.Length
+                });
+
+            linkLabelDownloads.Links.Add(
+                new LinkLabel.Link()
+                {
+                    Name = "downloads",
+                    LinkData = "https://github.com/SteveIves/PuTTYLauncher/releases",
+                    Start = 0,
+                    Length = linkLabelDownloads.Text.Length
+                });
 
             //Set the initial window visibility
             ShowInTaskbar = !checkStartInTray.Checked;
@@ -600,6 +631,28 @@ namespace PuTTYLauncher
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     textBoxPuTTYPath.Text = openFileDialog.FileName;
+                }
+            }
+        }
+
+        private void linkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            if (e.Link != null && e.Link.LinkData != null)
+            {
+                try
+                {
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = e.Link.LinkData.ToString(),
+                        UseShellExecute = true
+                    });
+                }
+                catch
+                {
+                    MessageBox.Show($"Unable to open {e.Link.Name} link.",
+                        Application.ProductName,
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
                 }
             }
         }
