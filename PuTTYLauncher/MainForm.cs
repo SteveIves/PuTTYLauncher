@@ -10,6 +10,7 @@ namespace PuTTYLauncher
         private ContextMenuStrip contextMenu;
         private ConnectionProfile? selectedProfile;
         private ConnectionProfile? selectedProfileBackup;
+        private ListViewItem? pendingListViewItem;
         private bool loadingData = true;
         private bool newProfileMode = false;
         private Icon? appIcon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
@@ -94,7 +95,8 @@ namespace PuTTYLauncher
 
             // Add a separator and an Edit profiles menu item
             contextMenu.Items.Add(new ToolStripSeparator());
-            contextMenu.Items.Add("Edit profiles", null, (s, e) => {
+            contextMenu.Items.Add("Edit profiles", null, (s, e) =>
+            {
                 Show();
                 WindowState = FormWindowState.Normal;
                 ShowInTaskbar = true;
@@ -103,7 +105,8 @@ namespace PuTTYLauncher
 
             // Add a separator and an Exit menu item
             contextMenu.Items.Add(new ToolStripSeparator());
-            contextMenu.Items.Add("Exit", null, (s,e) => {
+            contextMenu.Items.Add("Exit", null, (s, e) =>
+            {
                 notifyIcon.Visible = false;
                 Application.Exit();
             });
@@ -222,7 +225,7 @@ namespace PuTTYLauncher
         /// <param name="e"></param>
         private void textBoxProfileName_TextChanged(object sender, EventArgs e)
         {
-            if (selectedProfile != null && listViewProfiles.SelectedItems.Count == 1 && !loadingData)
+            if (selectedProfile != null && listViewProfiles.SelectedItems.Count == 1 && !loadingData && !newProfileMode)
             {
                 string oldName = selectedProfile.Name;
 
@@ -255,7 +258,7 @@ namespace PuTTYLauncher
         /// <param name="e"></param>
         private void comboBoxPuttySession_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (selectedProfile != null && !loadingData && comboBoxPuttySession.SelectedItem != null)
+            if (selectedProfile != null && !loadingData && comboBoxPuttySession.SelectedItem != null && !newProfileMode)
             {
                 selectedProfile.Session = (string)comboBoxPuttySession.SelectedItem;
                 maybeSaveStatus();
@@ -269,7 +272,7 @@ namespace PuTTYLauncher
         /// <param name="e"></param>
         private void textBoxUsername_TextChanged(object sender, EventArgs e)
         {
-            if (selectedProfile != null && !loadingData)
+            if (selectedProfile != null && !loadingData && !newProfileMode)
             {
                 selectedProfile.User = textBoxUsername.Text;
                 maybeSaveStatus();
@@ -283,7 +286,7 @@ namespace PuTTYLauncher
         /// <param name="e"></param>
         private void textBoxPassword_TextChanged(object sender, EventArgs e)
         {
-            if (selectedProfile != null && !loadingData)
+            if (selectedProfile != null && !loadingData && !newProfileMode)
             {
                 selectedProfile.Password = DPAPIEncryption.Encrypt(textBoxPassword.Text);
                 maybeSaveStatus();
@@ -297,7 +300,7 @@ namespace PuTTYLauncher
         private bool maybeSaveStatus()
         {
             bool saved = false;
-            if (!loadingData && listViewProfiles.SelectedItems.Count == 1 && selectedProfile != null && selectedProfileBackup != null && PuTTYLauncher.Settings != null)
+            if (!loadingData && !newProfileMode && listViewProfiles.SelectedItems.Count == 1 && selectedProfile != null && selectedProfileBackup != null && PuTTYLauncher.Settings != null)
             {
                 if (!selectedProfile.IsSameAs(selectedProfileBackup))
                 {
@@ -341,12 +344,39 @@ namespace PuTTYLauncher
         {
             if (newProfileMode)
             {
-                //We're a Save new profile button
+                //Save new profile button clicked
 
+                //Can't happen, but suppresses "might be null" warnings
+                if (pendingListViewItem == null || selectedProfile == null || PuTTYLauncher.Settings == null)
+                    return;
+
+                selectedProfile = new ConnectionProfile() { 
+                    Name = textBoxProfileName.Text,
+                    Session = comboBoxPuttySession.Text,
+                    User = textBoxUsername.Text,
+                    Password = DPAPIEncryption.Encrypt(textBoxPassword.Text)
+                };
+
+                PuTTYLauncher.Settings.Profiles.Add(selectedProfile);
+                PuTTYLauncher.Settings.SaveToFile();
+
+                pendingListViewItem.Name = selectedProfile.Key;
+                pendingListViewItem.Text = selectedProfile.Name;
+                pendingListViewItem = null;
+
+                newProfileMode = false;
+                listViewProfiles.SelectedIndexChanged += listViewProfiles_SelectedIndexChanged;
+
+                btnDeleteProfile.Enabled = true;
+                btnOpenSave.Text = "Open";
+                btnNewCancel.Text = "New";
+
+                listViewProfiles.Enabled = true;
+                listViewProfiles.Focus();
             }
             else
             {
-                //We're an Open profile button
+                //Open profile button clicked
                 launchSelectedProfile();
             }
         }
@@ -360,21 +390,27 @@ namespace PuTTYLauncher
         {
             if (!newProfileMode)
             {
+                // New profile button clicked
+
                 newProfileMode = true;
+                listViewProfiles.SelectedIndexChanged -= listViewProfiles_SelectedIndexChanged;
 
                 listViewProfiles.Enabled = false;
 
-                textBoxProfileName.Text = String.Empty;
+                pendingListViewItem = listViewProfiles.Items.Add(
+                    new ListViewItem()
+                    {
+                        Name = Guid.NewGuid().ToString(),
+                        Text = "New Profile"
+                    });
+                pendingListViewItem.Selected = true;
+                pendingListViewItem.EnsureVisible();
+
+                textBoxProfileName.Text = pendingListViewItem.Text;
                 comboBoxPuttySession.SelectedIndex = 0;
                 textBoxUsername.Text = String.Empty;
                 textBoxPassword.Text = String.Empty;
 
-                textBoxProfileName.Enabled = true;
-                comboBoxPuttySession.Enabled = true;
-                textBoxUsername.Enabled = true;
-                textBoxPassword.Enabled = true;
-
-                btnOpenSave.Enabled = false;
                 btnDeleteProfile.Enabled = false;
                 btnOpenSave.Text = "Save";
                 btnNewCancel.Text = "Cancel";
@@ -382,26 +418,28 @@ namespace PuTTYLauncher
             }
             else
             {
-                //Validate
+                //Cancel new profile button clicked
 
-                //Save
+                //Can't happen, but suppresses "might be null" warnings
+                if (pendingListViewItem == null || selectedProfile == null)
+                    return;
 
+                //Remove the new profile from the list
+                listViewProfiles.SelectedItems.Clear();
+                listViewProfiles.Items.Remove(pendingListViewItem);
 
-                //Reset
+                //Find and select the previously selected profile
                 newProfileMode = false;
-                textBoxProfileName.Text = selectedProfile?.Name;
-                comboBoxPuttySession.SelectedItem = selectedProfile?.Session;
-                textBoxUsername.Text = selectedProfile?.User;
-                if (selectedProfile?.Password != null)
-                    textBoxPassword.Text = DPAPIEncryption.Decrypt(selectedProfile.Password);
-                comboBoxPuttySession.SelectedIndex = 0;
-                textBoxUsername.Text = String.Empty;
-                textBoxPassword.Text = String.Empty;
-                listViewProfiles.Enabled = true;
-                btnOpenSave.Enabled = true;
+                listViewProfiles.SelectedIndexChanged += listViewProfiles_SelectedIndexChanged;
+                var previouslySelectedListItems = listViewProfiles.Items.Find(selectedProfile.Key, false);
+                previouslySelectedListItems[0].Selected = true;
+                previouslySelectedListItems[0].EnsureVisible();
+
                 btnDeleteProfile.Enabled = true;
                 btnOpenSave.Text = "Open";
                 btnNewCancel.Text = "New";
+
+                listViewProfiles.Enabled = true;
                 listViewProfiles.Focus();
             }
         }

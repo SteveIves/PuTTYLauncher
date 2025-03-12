@@ -71,7 +71,7 @@ namespace PuTTYLauncher
             var psi = new ProcessStartInfo
             {
                 FileName = Settings.PuTTYPath,
-                Arguments = $"-load \"{profile.Session}\" -l {profile.User} -pw {profile.Password}",
+                Arguments = $"-load \"{profile.Session}\" -l {profile.User} -pw {DPAPIEncryption.Decrypt(profile.Password)}",
                 UseShellExecute = false
             };
             Process.Start(psi);
