@@ -132,19 +132,10 @@ namespace PuTTYLauncher
             linkLabelProjectHome.Links.Add(
                 new LinkLabel.Link() 
                 {
-                    Name = "project home",
+                    Name = "documentation",
                     LinkData = "https://github.com/SteveIves/PuTTYLauncher", 
                     Start = 0, 
                     Length = linkLabelProjectHome.Text.Length 
-                });
-
-            linkLabelDocs.Links.Add(
-                new LinkLabel.Link()
-                {
-                    Name = "documentation",
-                    LinkData = "https://github.com/SteveIves/PuTTYLauncher/wiki",
-                    Start = 0,
-                    Length = linkLabelDocs.Text.Length
                 });
 
             linkLabelDownloads.Links.Add(

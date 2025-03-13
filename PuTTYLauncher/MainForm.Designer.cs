@@ -37,7 +37,6 @@
             checkRunAtLogin = new CheckBox();
             groupBoxMain = new GroupBox();
             linkLabelDownloads = new LinkLabel();
-            linkLabelDocs = new LinkLabel();
             linkLabelProjectHome = new LinkLabel();
             checkBoxShowPassword = new CheckBox();
             listViewProfiles = new ListView();
@@ -123,7 +122,6 @@
             // groupBoxMain
             // 
             groupBoxMain.Controls.Add(linkLabelDownloads);
-            groupBoxMain.Controls.Add(linkLabelDocs);
             groupBoxMain.Controls.Add(linkLabelProjectHome);
             groupBoxMain.Controls.Add(checkBoxShowPassword);
             groupBoxMain.Controls.Add(listViewProfiles);
@@ -156,26 +154,15 @@
             linkLabelDownloads.Text = "Downloads";
             linkLabelDownloads.LinkClicked += linkLabel_LinkClicked;
             // 
-            // linkLabelDocs
-            // 
-            linkLabelDocs.AutoSize = true;
-            linkLabelDocs.Location = new Point(724, 406);
-            linkLabelDocs.Name = "linkLabelDocs";
-            linkLabelDocs.Size = new Size(112, 20);
-            linkLabelDocs.TabIndex = 13;
-            linkLabelDocs.TabStop = true;
-            linkLabelDocs.Text = "Documentation";
-            linkLabelDocs.LinkClicked += linkLabel_LinkClicked;
-            // 
             // linkLabelProjectHome
             // 
             linkLabelProjectHome.AutoSize = true;
-            linkLabelProjectHome.Location = new Point(618, 406);
+            linkLabelProjectHome.Location = new Point(721, 406);
             linkLabelProjectHome.Name = "linkLabelProjectHome";
-            linkLabelProjectHome.Size = new Size(100, 20);
+            linkLabelProjectHome.Size = new Size(112, 20);
             linkLabelProjectHome.TabIndex = 12;
             linkLabelProjectHome.TabStop = true;
-            linkLabelProjectHome.Text = "Project Home";
+            linkLabelProjectHome.Text = "Documentation";
             linkLabelProjectHome.LinkClicked += linkLabel_LinkClicked;
             // 
             // checkBoxShowPassword
@@ -354,6 +341,5 @@
         private Button buttonFindPuTTYPath;
         private LinkLabel linkLabelProjectHome;
         private LinkLabel linkLabelDownloads;
-        private LinkLabel linkLabelDocs;
     }
 }
