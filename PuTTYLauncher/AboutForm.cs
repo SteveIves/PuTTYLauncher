@@ -37,7 +37,7 @@ namespace PuTTYLauncher
                         return titleAttribute.Title;
                     }
                 }
-                return System.IO.Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().CodeBase);
+                return System.IO.Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().Location);
             }
         }
 
@@ -45,7 +45,9 @@ namespace PuTTYLauncher
         {
             get
             {
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
                 return Assembly.GetExecutingAssembly().GetName().Version.ToString();
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
             }
         }
 
