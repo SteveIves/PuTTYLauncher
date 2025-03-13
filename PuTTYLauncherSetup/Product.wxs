@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product
+		Id="*"
+		Name="PuTTY Launcher"
+		Language="1033"
+		Version="1.0"
+		Manufacturer="Steve Ives"
+		UpgradeCode="09901f1e-7051-468b-be77-b3567f29c191">
+
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" Platform="x64" />
+
+		<!-- ************************************************************************************************************* -->
+		<!-- Setting these properties causes these URL's to be displayed when the application is selected in "Programs and Features"-->
+		<Property Id="ARPHELPLINK"      Value="https://github.com/SteveIves/PuTTYLauncher" />
+		<Property Id="ARPURLINFOABOUT"  Value="https://github.com/SteveIves/PuTTYLauncher" />
+		<Property Id="ARPURLUPDATEINFO" Value="https://github.com/SteveIves/PuTTYLauncher/releases/latest" />
+
+		<!-- ************************************************************************************************************* -->
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+
+		<MediaTemplate EmbedCab="yes" />
+
+		<!-- ************************************************************************************************************* -->
+		<!-- Set the icon to be used in "Programs & Features" -->
+		<Icon Id="PuTTYLauncherIcon" SourceFile="..\PuTTYLauncher\PuTTYLauncher.ico"/>
+		<Property Id="ARPPRODUCTICON" Value="PuTTYLauncherIcon" />
+
+		<!-- ************************************************************************************************************* -->
+
+		<!-- Define the license agreement file -->
+		<WixVariable Id="WixUILicenseRtf" Value="..\license.rtf" />
+
+		<UI>
+			<UIRef Id="WixUI_PuTTYLauncher"/>
+		</UI>
+
+		<ComponentGroup Id="AppComponents" Directory="INSTALLFOLDER">
+			<!-- appsettings.json -->
+			<Component Id="file_appsettings.json" Guid="{20A4C4A0-26F5-4D5A-9E2B-266CAC5C5166}" Win64="yes">
+				<File Id="file_appsettings.json" Source="..\PuTTYLauncher\bin\Release\net8.0-windows\publish\appsettings.json" Checksum="yes" />
+			</Component>
+			<!-- Microsoft.Extensions.Configuration.Abstractions.dll -->
+			<Component Id="file_Microsoft.Extensions.Configuration.Abstractions.dll" Guid="{0B7D67AB-42B6-41A7-8BCC-A1B8E240FEE4}" Win64="yes">
+				<File Id="file_Microsoft.Extensions.Configuration.Abstractions.dll" Source="..\PuTTYLauncher\bin\Release\net8.0-windows\publish\Microsoft.Extensions.Configuration.Abstractions.dll" Checksum="yes" />
+			</Component>
+			<!-- Microsoft.Extensions.Configuration.dll -->
+			<Component Id="file_Microsoft.Extensions.Configuration.dll" Guid="{DE82EC9C-A2F3-4E44-BE00-6A1AF6D2E052}" Win64="yes">
+				<File Id="file_Microsoft.Extensions.Configuration.dll" Source="..\PuTTYLauncher\bin\Release\net8.0-windows\publish\Microsoft.Extensions.Configuration.dll" Checksum="yes" />
+			</Component>
+			<!-- Microsoft.Extensions.Configuration.FileExtensions.dll -->
+			<Component Id="file_Microsoft.Extensions.Configuration.FileExtensions.dll" Guid="{D7473C9C-B421-4D83-BFA4-FDC9929C7E80}" Win64="yes">
+				<File Id="file_Microsoft.Extensions.Configuration.FileExtensions.dll" Source="..\PuTTYLauncher\bin\Release\net8.0-windows\publish\Microsoft.Extensions.Configuration.FileExtensions.dll" Checksum="yes" />
+			</Component>
+			<!-- Microsoft.Extensions.Configuration.Json.dll -->
+			<Component Id="file_Microsoft.Extensions.Configuration.Json.dll" Guid="{F6DBD8FA-66E8-462A-903C-D246D638BDD4}" Win64="yes">
+				<File Id="file_Microsoft.Extensions.Configuration.Json.dll" Source="..\PuTTYLauncher\bin\Release\net8.0-windows\publish\Microsoft.Extensions.Configuration.Json.dll" Checksum="yes" />
+			</Component>
+			<!-- Microsoft.Extensions.FileProviders.Abstractions.dll -->
+			<Component Id="file_Microsoft.Extensions.FileProviders.Abstractions.dll" Guid="{EAEC6D8C-7928-40BF-B236-FF25228B5CB7}" Win64="yes">
+				<File Id="file_Microsoft.Extensions.FileProviders.Abstractions.dll" Source="..\PuTTYLauncher\bin\Release\net8.0-windows\publish\Microsoft.Extensions.FileProviders.Abstractions.dll" Checksum="yes" />
+			</Component>
+			<!-- Microsoft.Extensions.FileProviders.Physical.dll -->
+			<Component Id="file_Microsoft.Extensions.FileProviders.Physical.dll" Guid="{12B2B237-58BA-44EF-9185-79388F18D770}" Win64="yes">
+				<File Id="file_Microsoft.Extensions.FileProviders.Physical.dll" Source="..\PuTTYLauncher\bin\Release\net8.0-windows\publish\Microsoft.Extensions.FileProviders.Physical.dll" Checksum="yes" />
+			</Component>
+			<!-- Microsoft.Extensions.FileSystemGlobbing.dll -->
+			<Component Id="file_Microsoft.Extensions.FileSystemGlobbing.dll" Guid="{114A04A7-C802-4872-B0E9-5591D92DB9C6}" Win64="yes">
+				<File Id="file_Microsoft.Extensions.FileSystemGlobbing.dll" Source="..\PuTTYLauncher\bin\Release\net8.0-windows\publish\Microsoft.Extensions.FileSystemGlobbing.dll" Checksum="yes" />
+			</Component>
+			<!-- Microsoft.Extensions.Primitives.dll -->
+			<Component Id="file_Microsoft.Extensions.Primitives.dll" Guid="{05F261C2-B599-439E-9B44-22FE13DFB48D}" Win64="yes">
+				<File Id="file_Microsoft.Extensions.Primitives.dll" Source="..\PuTTYLauncher\bin\Release\net8.0-windows\publish\Microsoft.Extensions.Primitives.dll" Checksum="yes" />
+			</Component>
+			<!-- PuTTYLauncher.deps.json -->
+			<Component Id="file_PuTTYLauncher.deps.json" Guid="{10088FB5-09EF-48EB-88B1-DAD7556D4034}" Win64="yes">
+				<File Id="file_PuTTYLauncher.deps.json" Source="..\PuTTYLauncher\bin\Release\net8.0-windows\publish\PuTTYLauncher.deps.json" Checksum="yes" />
+			</Component>
+			<!-- PuTTYLauncher.dll -->
+			<Component Id="file_PuTTYLauncher.dll" Guid="{C03FD306-C5F5-455E-8202-87C8101306F8}" Win64="yes">
+				<File Id="file_PuTTYLauncher.dll" Source="..\PuTTYLauncher\bin\Release\net8.0-windows\publish\PuTTYLauncher.dll" Checksum="yes" />
+			</Component>
+			<!-- PuTTYLauncher.exe -->
+			<Component Id="file_PuTTYLauncher.exe" Guid="{7ACB9DEB-8606-4BC0-A045-18A9D0DA5744}" Win64="yes">
+				<File Id="file_PuTTYLauncher.exe" KeyPath="yes" Source="..\PuTTYLauncher\bin\Release\net8.0-windows\publish\PuTTYLauncher.exe" Checksum="yes" />
+			</Component>
+			<!-- PuTTYLauncher.pdb -->
+			<Component Id="file_PuTTYLauncher.pdb" Guid="{8574CF3B-7A4F-4548-B37F-BDA9C807F2F5}" Win64="yes">
+				<File Id="file_PuTTYLauncher.pdb" Source="..\PuTTYLauncher\bin\Release\net8.0-windows\publish\PuTTYLauncher.pdb" Checksum="yes" />
+			</Component>
+			<!-- PuTTYLauncher.runtimeconfig.json -->
+			<Component Id="file_PuTTYLauncher.runtimeconfig.json" Guid="{F9E29475-330B-4E38-9EBC-D25B0CDCE5EF}" Win64="yes">
+				<File Id="file_PuTTYLauncher.runtimeconfig.json" Source="..\PuTTYLauncher\bin\Release\net8.0-windows\publish\PuTTYLauncher.runtimeconfig.json" Checksum="yes" />
+			</Component>
+		</ComponentGroup>
+
+		<Component Id="PuTTYLauncherShortcutComponent" Guid="{F3A3A0E7-5678-49F5-A8C1-3F2F12345678}" Directory="PuTTYLauncherProgramMenuFolder">
+			<Shortcut Id="PuTTYLauncherShortcut"
+					  Name="PuTTY Launcher"
+					  Description="Launch PuTTY Launcher"
+					  Target="[INSTALLFOLDER]PuTTYLauncher.exe"
+					  WorkingDirectory="INSTALLFOLDER" />
+			<!-- Ensure directory removal on uninstall -->
+			<RemoveFolder Id="RemovePuTTYLauncherProgramMenuFolder"
+						  Directory="PuTTYLauncherProgramMenuFolder"
+						  On="uninstall"/>
+			<!-- Registry key to avoid ICE43 error -->
+			<RegistryValue Root="HKCU" Key="Software\PuTTYLauncher" Name="Installed" Type="integer" Value="1" KeyPath="yes" />
+			<!-- Remove shortcut on uninstall -->
+			<RemoveFile Id="RemovePuTTYLauncherShortcut"
+						Name="PuTTY Launcher.lnk"
+						Directory="PuTTYLauncherProgramMenuFolder"
+						On="uninstall"/>
+		</Component>
+
+		<Feature Id="ProductFeature" Title="PuTTYLauncherSetup" Level="1">
+			<ComponentGroupRef Id="AppComponents"/>
+			<ComponentRef Id="PuTTYLauncherShortcutComponent"/>
+		</Feature>
+
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFiles64Folder">
+				<Directory Id="INSTALLFOLDER" Name="PuTTYLauncher" />
+			</Directory>
+			<Directory Id="ProgramMenuFolder">
+				<Directory Id="PuTTYLauncherProgramMenuFolder" Name="PuTTY Launcher" />
+			</Directory>
+		</Directory>
+
+	</Product>
+
+</Wix>

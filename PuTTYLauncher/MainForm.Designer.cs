@@ -36,6 +36,7 @@
             checkStartInTray = new CheckBox();
             checkRunAtLogin = new CheckBox();
             groupBoxMain = new GroupBox();
+            linkLabelAbout = new LinkLabel();
             linkLabelLicense = new LinkLabel();
             linkLabelDownloads = new LinkLabel();
             linkLabelProjectHome = new LinkLabel();
@@ -122,6 +123,7 @@
             // 
             // groupBoxMain
             // 
+            groupBoxMain.Controls.Add(linkLabelAbout);
             groupBoxMain.Controls.Add(linkLabelLicense);
             groupBoxMain.Controls.Add(linkLabelDownloads);
             groupBoxMain.Controls.Add(linkLabelProjectHome);
@@ -145,13 +147,24 @@
             groupBoxMain.TabStop = false;
             groupBoxMain.Text = "Connection Profiles";
             // 
+            // linkLabelAbout
+            // 
+            linkLabelAbout.AutoSize = true;
+            linkLabelAbout.Location = new Point(876, 406);
+            linkLabelAbout.Name = "linkLabelAbout";
+            linkLabelAbout.Size = new Size(50, 20);
+            linkLabelAbout.TabIndex = 15;
+            linkLabelAbout.TabStop = true;
+            linkLabelAbout.Text = "&About";
+            linkLabelAbout.LinkClicked += linkLabelAbout_LinkClicked;
+            // 
             // linkLabelLicense
             // 
             linkLabelLicense.AutoSize = true;
-            linkLabelLicense.Location = new Point(869, 406);
+            linkLabelLicense.Location = new Point(813, 406);
             linkLabelLicense.Name = "linkLabelLicense";
             linkLabelLicense.Size = new Size(57, 20);
-            linkLabelLicense.TabIndex = 15;
+            linkLabelLicense.TabIndex = 14;
             linkLabelLicense.TabStop = true;
             linkLabelLicense.Text = "License";
             linkLabelLicense.LinkClicked += linkLabelLicense_LinkClicked;
@@ -159,10 +172,10 @@
             // linkLabelDownloads
             // 
             linkLabelDownloads.AutoSize = true;
-            linkLabelDownloads.Location = new Point(779, 406);
+            linkLabelDownloads.Location = new Point(723, 406);
             linkLabelDownloads.Name = "linkLabelDownloads";
             linkLabelDownloads.Size = new Size(84, 20);
-            linkLabelDownloads.TabIndex = 14;
+            linkLabelDownloads.TabIndex = 13;
             linkLabelDownloads.TabStop = true;
             linkLabelDownloads.Text = "Downloads";
             linkLabelDownloads.LinkClicked += linkLabel_LinkClicked;
@@ -170,7 +183,7 @@
             // linkLabelProjectHome
             // 
             linkLabelProjectHome.AutoSize = true;
-            linkLabelProjectHome.Location = new Point(658, 406);
+            linkLabelProjectHome.Location = new Point(602, 406);
             linkLabelProjectHome.Name = "linkLabelProjectHome";
             linkLabelProjectHome.Size = new Size(112, 20);
             linkLabelProjectHome.TabIndex = 12;
@@ -355,5 +368,6 @@
         private LinkLabel linkLabelProjectHome;
         private LinkLabel linkLabelDownloads;
         private LinkLabel linkLabelLicense;
+        private LinkLabel linkLabelAbout;
     }
 }

@@ -34,11 +34,12 @@
             // 
             // textBoxLicense
             // 
+            textBoxLicense.Font = new Font("Courier New", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             textBoxLicense.Location = new Point(12, 12);
             textBoxLicense.Multiline = true;
             textBoxLicense.Name = "textBoxLicense";
             textBoxLicense.ReadOnly = true;
-            textBoxLicense.Size = new Size(714, 566);
+            textBoxLicense.Size = new Size(718, 534);
             textBoxLicense.TabIndex = 0;
             textBoxLicense.Text = resources.GetString("textBoxLicense.Text");
             // 
@@ -46,7 +47,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(736, 591);
+            ClientSize = new Size(731, 558);
             Controls.Add(textBoxLicense);
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;

@@ -7,6 +7,9 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationIcon>PuTTYLauncher.ico</ApplicationIcon>
+    <Copyright>Copyright (c) Steve Ives, 2025</Copyright>
+    <Description>A Windows desktop utility to help launch PuTTY SSH sessions with pre-defined usernames and passwords, automating the login process.</Description>
+    <Authors>Steve Ives</Authors>
   </PropertyGroup>
 
   <ItemGroup>

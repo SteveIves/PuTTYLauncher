@@ -130,12 +130,12 @@ namespace PuTTYLauncher
             //Configure the URIs for the LinkLabels
 
             linkLabelProjectHome.Links.Add(
-                new LinkLabel.Link() 
+                new LinkLabel.Link()
                 {
                     Name = "documentation",
-                    LinkData = "https://github.com/SteveIves/PuTTYLauncher", 
-                    Start = 0, 
-                    Length = linkLabelProjectHome.Text.Length 
+                    LinkData = "https://github.com/SteveIves/PuTTYLauncher",
+                    Start = 0,
+                    Length = linkLabelProjectHome.Text.Length
                 });
 
             linkLabelDownloads.Links.Add(
@@ -659,6 +659,12 @@ namespace PuTTYLauncher
         private void linkLabelLicense_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             var dlg = new LicenseForm();
+            dlg.ShowDialog();
+        }
+
+        private void linkLabelAbout_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            var dlg = new AboutForm();
             dlg.ShowDialog();
         }
     }
