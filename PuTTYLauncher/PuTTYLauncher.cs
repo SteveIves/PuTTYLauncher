@@ -88,7 +88,7 @@ namespace PuTTYLauncher
 
             return systemDrive;
         }
-        
+
         /// <summary>
         /// Launch PuTTY with the given profile
         /// </summary>
@@ -99,10 +99,14 @@ namespace PuTTYLauncher
             if (Settings == null)
                 return;
 
+            string args = profile.Name.Equals("Default Settings")
+                ? $"-load \"{profile.Session}\""
+                : $"-load \"{profile.Session}\" -l {profile.User} -pw {DPAPIEncryption.Decrypt(profile.Password)}";
+
             var psi = new ProcessStartInfo
             {
                 FileName = Settings.PuTTYPath,
-                Arguments = $"-load \"{profile.Session}\" -l {profile.User} -pw {DPAPIEncryption.Decrypt(profile.Password)}",
+                Arguments = args,
                 UseShellExecute = false
             };
             Process.Start(psi);
