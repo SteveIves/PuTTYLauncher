@@ -147,6 +147,15 @@ namespace PuTTYLauncher
                     Length = linkLabelDownloads.Text.Length
                 });
 
+            linkLabelLicense.Links.Add(
+                new LinkLabel.Link()
+                {
+                    Name = "license",
+                    LinkData = "https://raw.githubusercontent.com/SteveIves/PuTTYLauncher/refs/heads/master/LICENSE.txt",
+                    Start = 0,
+                    Length = linkLabelLicense.Text.Length
+                });
+
             //Set the initial window visibility
             ShowInTaskbar = !checkStartInTray.Checked;
             WindowState = checkStartInTray.Checked ? FormWindowState.Minimized : FormWindowState.Normal;
@@ -646,6 +655,11 @@ namespace PuTTYLauncher
                         MessageBoxIcon.Error);
                 }
             }
+        }
+        private void linkLabelLicense_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            var dlg = new LicenseForm();
+            dlg.ShowDialog();
         }
     }
 }

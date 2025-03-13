@@ -36,6 +36,7 @@
             checkStartInTray = new CheckBox();
             checkRunAtLogin = new CheckBox();
             groupBoxMain = new GroupBox();
+            linkLabelLicense = new LinkLabel();
             linkLabelDownloads = new LinkLabel();
             linkLabelProjectHome = new LinkLabel();
             checkBoxShowPassword = new CheckBox();
@@ -121,6 +122,7 @@
             // 
             // groupBoxMain
             // 
+            groupBoxMain.Controls.Add(linkLabelLicense);
             groupBoxMain.Controls.Add(linkLabelDownloads);
             groupBoxMain.Controls.Add(linkLabelProjectHome);
             groupBoxMain.Controls.Add(checkBoxShowPassword);
@@ -143,10 +145,21 @@
             groupBoxMain.TabStop = false;
             groupBoxMain.Text = "Connection Profiles";
             // 
+            // linkLabelLicense
+            // 
+            linkLabelLicense.AutoSize = true;
+            linkLabelLicense.Location = new Point(869, 406);
+            linkLabelLicense.Name = "linkLabelLicense";
+            linkLabelLicense.Size = new Size(57, 20);
+            linkLabelLicense.TabIndex = 15;
+            linkLabelLicense.TabStop = true;
+            linkLabelLicense.Text = "License";
+            linkLabelLicense.LinkClicked += linkLabelLicense_LinkClicked;
+            // 
             // linkLabelDownloads
             // 
             linkLabelDownloads.AutoSize = true;
-            linkLabelDownloads.Location = new Point(842, 406);
+            linkLabelDownloads.Location = new Point(779, 406);
             linkLabelDownloads.Name = "linkLabelDownloads";
             linkLabelDownloads.Size = new Size(84, 20);
             linkLabelDownloads.TabIndex = 14;
@@ -157,7 +170,7 @@
             // linkLabelProjectHome
             // 
             linkLabelProjectHome.AutoSize = true;
-            linkLabelProjectHome.Location = new Point(721, 406);
+            linkLabelProjectHome.Location = new Point(658, 406);
             linkLabelProjectHome.Name = "linkLabelProjectHome";
             linkLabelProjectHome.Size = new Size(112, 20);
             linkLabelProjectHome.TabIndex = 12;
@@ -341,5 +354,6 @@
         private Button buttonFindPuTTYPath;
         private LinkLabel linkLabelProjectHome;
         private LinkLabel linkLabelDownloads;
+        private LinkLabel linkLabelLicense;
     }
 }
