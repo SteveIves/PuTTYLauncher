@@ -3,16 +3,18 @@ using System.Diagnostics;
 using Microsoft.Win32;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.IO.Pipes;
 
 namespace PuTTYLauncher
 {
     internal static class PuTTYLauncher
     {
-        public static string ExecutableFile = Assembly.GetExecutingAssembly().Location.Replace(".dll", ".exe");
+        public static string ExecutableFile = String.Empty;
 
         public static AppSettings? Settings { get; private set; }
 
         private const string autoRunRegistryKey = @"Software\Microsoft\Windows\CurrentVersion\Run";
+        private const string pipeName = "PuTTYLauncherPipe";
 
         /// <summary>
         ///  The main entry point for the application.
@@ -20,6 +22,38 @@ namespace PuTTYLauncher
         [STAThread]
         static void Main()
         {
+            string? processPath = Environment.ProcessPath;
+            if (processPath != null)
+                ExecutableFile = Path.ChangeExtension(processPath, ".exe");
+
+            // Check if another instance is already running and if so, tell it to show its window, then exit
+            bool createdNew;
+            Mutex mutex = new Mutex(true, $"Global\\PuTTYLauncher", out createdNew);
+
+            if (!createdNew)
+            {
+                try
+                {
+                    using (var client = new NamedPipeClientStream(".", pipeName, PipeDirection.Out))
+                    {
+                        client.Connect(1000); // 1 second timeout
+                        using (var writer = new StreamWriter(client) { AutoFlush = true })
+                        {
+                            writer.WriteLine("SHOW");
+                        }
+                    }
+                }
+                catch
+                {
+                    // If the pipe isn't available, ignore error
+                }
+
+                // Then exit this instance
+                Application.Exit();
+                return;
+            }
+
+            // Load settings
             try
             {
                 Settings = AppSettings.LoadFromFile();
@@ -57,6 +91,50 @@ namespace PuTTYLauncher
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());
+        }
+
+        /// <summary>
+        /// Start the named pipe server to listen for messages from other instances
+        /// </summary>
+        private static void StartPipeServer()
+        {
+            Task.Run(() =>
+            {
+                while (true)
+                {
+                    using (var server = new NamedPipeServerStream(pipeName, PipeDirection.In))
+                    {
+                        server.WaitForConnection();
+                        using (var reader = new StreamReader(server))
+                        {
+                            var command = reader.ReadLine();
+                            if (command == "SHOW")
+                            {
+                                ShowMainWindow();
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        /// <summary>
+        /// Show the main window
+        /// </summary>
+        private static void ShowMainWindow()
+        {
+            // Needs to be run on UI thread
+            Application.OpenForms[0]?.BeginInvoke((Action)(() =>
+            {
+                var form = Application.OpenForms[0];
+
+                if (form?.WindowState == FormWindowState.Minimized)
+                    form.WindowState = FormWindowState.Normal;
+
+                form?.Show();
+                form?.BringToFront();
+                form?.Activate();
+            }));
         }
 
         public static string GetDefaultPuTTYExecutable()
@@ -133,7 +211,7 @@ namespace PuTTYLauncher
             {
                 if (key != null)
                 {
-                    key.SetValue(Application.ProductName, $"\"{Assembly.GetExecutingAssembly().Location.Replace(".dll", ".exe")}\"");
+                    key.SetValue(Application.ProductName, $"\"{ExecutableFile}\"");
                 }
             }
         }
