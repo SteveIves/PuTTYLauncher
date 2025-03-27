@@ -95,7 +95,7 @@ jobs:
 
     - name: Build WiX Setup Project
       run: |
-        & "${{ steps.find-msbuild.outputs.path }}" "PuTTYLauncher\PuTTYLauncherSetup.wixproj" /p:Configuration=Release
+        & "${{ steps.find-msbuild.outputs.path }}" "PuTTYLauncherSetup\PuTTYLauncherSetup.wixproj" /p:Configuration=Release
       shell: pwsh
 
     - name: Sign MSI
