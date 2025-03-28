@@ -1,3 +1,5 @@
+[![Build and Package .NET 8 Solution](https://github.com/SteveIves/PuTTYLauncher/actions/workflows/build.yml/badge.svg)](https://github.com/SteveIves/PuTTYLauncher/actions/workflows/build.yml)
+
 # PuttyLauncher
 
 PuTTYLauncher is a simple Windows desktop application that can be used to launch pre-configured PuTTY sessions, and when launching SSH sessions a username and password can be provided, resulting in an automated login process. When you launch PuTTYLauncher for the first time, this is what you will see:
