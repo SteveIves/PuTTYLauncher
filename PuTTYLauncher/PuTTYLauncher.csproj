@@ -10,7 +10,7 @@
     <Copyright>Copyright (c) Steve Ives, 2025</Copyright>
     <Description>A Windows desktop utility to help launch PuTTY SSH sessions with pre-defined usernames and passwords, automating the login process.</Description>
     <Authors>Steve Ives</Authors>
-    <AssemblyVersion>1.1</AssemblyVersion>
+    <AssemblyVersion>1.2</AssemblyVersion>
     <FileVersion>1.2</FileVersion>
   </PropertyGroup>
 
