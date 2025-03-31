@@ -26,7 +26,7 @@ namespace PuTTYLauncher
             // Create a system tray icon
             notifyIcon = new NotifyIcon
             {
-                Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath),
+                Icon = appIcon,
                 Text = "PuTTY Launcher",
                 Visible = true
             };

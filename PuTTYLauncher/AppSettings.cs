@@ -70,7 +70,13 @@ namespace PuTTYLauncher
 
             try
             {
+                // Sort the profiles alphabetically by Name
+                profiles.Sort((p1, p2) => string.Compare(p1.Name, p2.Name, StringComparison.OrdinalIgnoreCase));
+
+                // Serialize the class to a JSON string
                 string json = JsonSerializer.Serialize(this, options);
+
+                // Write the JSON string to the settings file
                 File.WriteAllText(SettingsFile, json);
                 saved = true;
             }
