@@ -514,7 +514,15 @@ namespace PuTTYLauncher
                 pendingListViewItem.EnsureVisible();
 
                 textBoxProfileName.Text = pendingListViewItem.Text;
+
+                comboBoxPuttySession.Items.Clear();
+                comboBoxPuttySession.Items.Add("(none)");
+                foreach (var session in PuTTYLauncher.GetPuttySessions())
+                {
+                    comboBoxPuttySession.Items.Add(session);
+                }
                 comboBoxPuttySession.SelectedIndex = 0;
+
                 textBoxUsername.Text = String.Empty;
                 textBoxPassword.Text = String.Empty;
 
