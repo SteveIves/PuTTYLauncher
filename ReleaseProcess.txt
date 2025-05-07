@@ -1,0 +1,10 @@
+
+Finish dedelopment and commit and push changes.
+
+Change the version number:
+- In two places in the PuttyLauncher project properties (Assembly Version and File Version)
+- In the PuttyLauncherSettings project properties (Output name)
+- On Product.wsx (Version)
+
+Commit and push the version number changes.
+
