@@ -4,7 +4,7 @@
 		Id="*"
 		Name="PuTTY Launcher"
 		Language="1033"
-		Version="1.3"
+		Version="1.4"
 		Manufacturer="Steve Ives"
 		UpgradeCode="09901f1e-7051-468b-be77-b3567f29c191">
 
@@ -61,42 +61,17 @@
 
 			<!-- appsettings.json -->
 			<Component Id="file_appsettings.json" Guid="*" Win64="yes">
-				<File Id="file_appsettings.json" Source="..\PuTTYLauncher\bin\Release\net8.0-windows\publish\win-x64\appsettings.json" Checksum="yes" />
-			</Component>
-
-			<!-- D3DCompiler_47_cor3.dll -->
-			<Component Id="file_D3DCompiler_47_cor3.dll" Guid="*" Win64="yes">
-				<File Id="file_D3DCompiler_47_cor3.dll" Source="..\PuTTYLauncher\bin\Release\net8.0-windows\publish\win-x64\D3DCompiler_47_cor3.dll" Checksum="yes" />
-			</Component>
-
-			<!-- PenImc_cor3.dll -->
-			<Component Id="file_PenImc_cor3.dll" Guid="*" Win64="yes">
-				<File Id="file_PenImc_cor3.dll" Source="..\PuTTYLauncher\bin\Release\net8.0-windows\publish\win-x64\PenImc_cor3.dll" Checksum="yes" />
-			</Component>
-
-			<!-- PresentationNative_cor3.dll -->
-			<Component Id="file_PresentationNative_cor3.dll" Guid="*" Win64="yes">
-				<File Id="file_PresentationNative_cor3.dll" Source="..\PuTTYLauncher\bin\Release\net8.0-windows\publish\win-x64\PresentationNative_cor3.dll" Checksum="yes" />
+				<File Id="file_appsettings.json" Source="..\PuTTYLauncher\bin\Release\net10.0-windows\publish\win-x64\appsettings.json" Checksum="yes" />
 			</Component>
 
 			<!-- PuTTYLauncher.exe -->
 			<Component Id="file_PuTTYLauncher.exe" Guid="*" Win64="yes">
-				<File Id="file_PuTTYLauncher.exe" Source="..\PuTTYLauncher\bin\Release\net8.0-windows\publish\win-x64\PuTTYLauncher.exe" Checksum="yes" />
+				<File Id="file_PuTTYLauncher.exe" Source="..\PuTTYLauncher\bin\Release\net10.0-windows\publish\win-x64\PuTTYLauncher.exe" Checksum="yes" />
 			</Component>
 
 			<!-- PuTTYLauncher.pdb -->
 			<Component Id="file_PuTTYLauncher.pdb" Guid="*" Win64="yes">
-				<File Id="file_PuTTYLauncher.pdb" Source="..\PuTTYLauncher\bin\Release\net8.0-windows\publish\win-x64\PuTTYLauncher.pdb" Checksum="yes" />
-			</Component>
-
-			<!-- vcruntime140_cor3.dll -->
-			<Component Id="file_vcruntime140_cor3.dll" Guid="*" Win64="yes">
-				<File Id="file_vcruntime140_cor3.dll" Source="..\PuTTYLauncher\bin\Release\net8.0-windows\publish\win-x64\vcruntime140_cor3.dll" Checksum="yes" />
-			</Component>
-
-			<!-- wpfgfx_cor3.dll -->
-			<Component Id="file_wpfgfx_cor3.dll" Guid="*" Win64="yes">
-				<File Id="file_wpfgfx_cor3.dll" Source="..\PuTTYLauncher\bin\Release\net8.0-windows\publish\win-x64\wpfgfx_cor3.dll" Checksum="yes" />
+				<File Id="file_PuTTYLauncher.pdb" Source="..\PuTTYLauncher\bin\Release\net10.0-windows\publish\win-x64\PuTTYLauncher.pdb" Checksum="yes" />
 			</Component>
 
 		</ComponentGroup>

@@ -1,4 +1,4 @@
-name: Build and Package .NET 8 Solution
+name: Build and Package .NET 10 Solution
 
 on:
   push:
@@ -21,10 +21,10 @@ jobs:
         fetch-depth: 0
         submodules: 'recursive'
 
-    - name: Setup .NET 8 SDK
+    - name: Setup .NET 10 SDK
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '8.x'
+        dotnet-version: '10.x'
 
     - name: Install AzureSignTool
       run: dotnet tool install --global AzureSignTool
@@ -41,7 +41,7 @@ jobs:
           --configuration Release `
           --runtime win-x64 `
           --self-contained true `
-          --output PuTTYLauncher/bin/Release/net8.0-windows/publish/win-x64/ `
+          --output PuTTYLauncher/bin/Release/net10.0-windows/publish/win-x64/ `
           /p:PublishSingleFile=true `
           /p:PublishReadyToRun=true
 
@@ -55,7 +55,7 @@ jobs:
         AZURE_CERT_NAME: ${{ secrets.AZURE_CERT_NAME }}
       shell: pwsh
       run: |
-        $publishDirs = @("PuTTYLauncher/bin/Release/net8.0-windows/publish/win-x64")
+        $publishDirs = @("PuTTYLauncher/bin/Release/net10.0-windows/publish/win-x64")
         foreach ($dir in $publishDirs) {
           if (Test-Path $dir) {
             $files = Get-ChildItem -Path $dir -Include *.exe, *.dll -Recurse

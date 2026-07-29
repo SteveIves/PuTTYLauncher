@@ -6,7 +6,7 @@
     <ProductVersion>3.10</ProductVersion>
     <ProjectGuid>731ad0b7-4f8a-4d4d-ade9-2f287aceac18</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
-    <OutputName>PuTTYLauncher_1.3</OutputName>
+    <OutputName>PuTTYLauncher_1.4</OutputName>
     <OutputType>Package</OutputType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">

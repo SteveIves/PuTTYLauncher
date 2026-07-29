@@ -1,8 +1,12 @@
-[![Build and Package .NET 8 Solution](https://github.com/SteveIves/PuTTYLauncher/actions/workflows/build.yml/badge.svg)](https://github.com/SteveIves/PuTTYLauncher/actions/workflows/build.yml)
+[![.NET 10](https://img.shields.io/badge/.NET-10.0-512BD4?logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/download/dotnet/10.0)
+[![Windows](https://img.shields.io/badge/platform-Windows-0078D4?logo=windows&logoColor=white)](https://www.microsoft.com/windows)
+[![Latest Release](https://img.shields.io/github/v/release/SteveIves/PuTTYLauncher?display_name=tag&sort=semver)](https://github.com/SteveIves/PuTTYLauncher/releases/latest)
+[![License](https://img.shields.io/github/license/SteveIves/PuTTYLauncher)](LICENSE.txt)
+[![Build and Package](https://github.com/SteveIves/PuTTYLauncher/actions/workflows/build.yml/badge.svg)](https://github.com/SteveIves/PuTTYLauncher/actions/workflows/build.yml)
 
 # PuttyLauncher
 
-PuTTYLauncher is a simple Windows desktop application that can be used to launch pre-configured PuTTY sessions, and when launching SSH sessions a username and password can be provided, resulting in an automated login process. When you launch PuTTYLauncher for the first time, this is what you will see:
+PuTTYLauncher is a desktop application to launch pre-configured PuTTY sessions, and when launching SSH sessions a username and password can be provided, resulting in an automated login process. When you launch PuTTYLauncher for the first time, this is what you will see:
 
 ![Main Window](images/MainWindow.png)
 
@@ -61,6 +65,5 @@ Settings and connection profiles are saved to a configuration file named `PuTTYL
 ### Password Encryption
 
 Any passwords that you enter are immediately encrypted before being saved to the configuration file. We use Windows DPAPI Encryption which is based on enctryption keys provided by Windows and associated with your Windows login. This means that the stored passwords can only be decrypted when logged into the same Windows user account that was used to encrypt them in the first place.
-
 
 
